@@ -35,6 +35,29 @@
         height: auto;
         border-radius: 10px;
         padding: 20px 0;
+        .buttonsRegisterContainer{
+            display: flex;
+            width: 100%;
+            justify-content: space-evenly;
+            button{
+                height: 50px;
+                border-radius: 10px;
+                margin: 10px 0;
+                width: 120px;
+                border: none;
+                box-shadow: 0px 0px 6px -2px rgba(0,0,0,0.75);
+                font-size: 17px;
+                background-color: #ffffff;
+                color: rgb(53, 53, 53);
+                &:focus{
+                    outline: none;
+                }
+                &.selected{
+                    background-color: darkblue;
+                    color: #ffffff;
+                }
+            }
+        }
         form{
             height: 100%;
             width: 100%;
@@ -61,13 +84,13 @@
             button{
                 width: 80%;
                 font-size: 17px;
-            height: 40px;
-            border-radius: 10px;
-            background-color: darkblue;
-            margin: 10px 0;
-            border: none;
-            box-shadow: 0px 0px 6px -2px rgba(0,0,0,0.75);
-            color: #ffffff;
+                height: 40px;
+                border-radius: 10px;
+                background-color: darkblue;
+                margin: 10px 0;
+                border: none;
+                box-shadow: 0px 0px 6px -2px rgba(0,0,0,0.75);
+                color: #ffffff;
             }
         }
     }

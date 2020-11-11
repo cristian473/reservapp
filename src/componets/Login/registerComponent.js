@@ -2,25 +2,61 @@ import React, { useState } from 'react'
 
 const RegisterComponent = () => {
     const [input, setinputs] = useState({ name: '', tel: '', pass: '', repeatPass: '', email: '' })
+    const [insInput, setIntitutionInput] = useState({ institutionName: '', direction: '', pass: '', repeatPass: '', email: '' })
+    const [registerType, setType] = useState('person')
 
-    const handlerInput = (e) => {
+    const institutionInput = (e) => {
+        const { value, name } = e.target
+        setIntitutionInput({ ...insInput, [name]: value })
+    }
+
+    const personInput = (e) => {
         const { value, name } = e.target
         setinputs({ ...input, [name]: value })
     }
 
-    const handlerSubmit = (e) => {
+    const personSubmit = (e) => {
         e.preventDefault()
+        console.log(input);
+    }
+    const institutionSubmit = (e) => {
+        e.preventDefault()
+        console.log(insInput);
     }
     return (
         <div className="FormContainer">
-            <form onSubmit={handlerSubmit} >
-                <input required placeholder='Nombre y apellido' id='name' name='name' type="name" onChange={handlerInput} />
-                <input required placeholder='Numero de telefono' id='tel' name='tel' type="number" onChange={handlerInput} />
-                <input required placeholder='Correo electronico' id='email' name='email' type="email" onChange={handlerInput} />
-                <input required placeholder='Contraseña' id='password' name='pass' type="password" onChange={handlerInput} />
-                <input required placeholder='Repetir contraseña' id='repeatPass' name='repeatPass' type="password" onChange={handlerInput} />
-                <button type='submit' >Registrarse</button>
-            </form>
+            <div className="buttonsRegisterContainer">
+                <button
+                    className={`${registerType === 'person' && 'selected'}`}
+                    onClick={() => setType('person')} >
+                    Registro de personas
+                </button>
+                <button
+                    className={`${registerType === 'institution' && 'selected'}`}
+                    onClick={() => setType('institution')} >
+                    Registro de institución
+                </button>
+            </div>
+            {registerType === 'person' && (
+                <form onSubmit={personSubmit} >
+                    <input required placeholder='Nombre y apellido' id='name' name='name' type="name" onChange={personInput} />
+                    <input required placeholder='Numero de telefono' id='tel' name='tel' type="number" onChange={personInput} />
+                    <input required placeholder='Correo electronico' id='email' name='email' type="email" onChange={personInput} />
+                    <input required placeholder='Contraseña' id='password' name='pass' type="password" onChange={personInput} />
+                    <input required placeholder='Repetir contraseña' id='repeatPass' name='repeatPass' type="password" onChange={personInput} />
+                    <button type='submit' >Registrarse</button>
+                </form>
+            )}
+            {registerType === 'institution' && (
+                <form onSubmit={institutionSubmit} >
+                    <input required placeholder='Nombre de la institucion' id='institutionName' name='institutionName' type="text" onChange={institutionInput} />
+                    <input required placeholder='Dirección' id='direction' name='direction' type="address" onChange={institutionInput} />
+                    <input required placeholder='Correo electronico' id='email' name='email' type="email" onChange={institutionInput} />
+                    <input required placeholder='Contraseña' id='password' name='pass' type="password" onChange={institutionInput} />
+                    <input required placeholder='Repetir contraseña' id='repeatPass' name='repeatPass' type="password" onChange={institutionInput} />
+                    <button type='submit' >Registrarse</button>
+                </form>
+            )}
         </div>
     )
 }
