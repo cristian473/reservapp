@@ -1,0 +1,29 @@
+.createEventComponent{
+    display: flex;    
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    .cuposTime{
+        width: 80%;
+        display: flex;
+        justify-content: space-between;
+        input{
+            width: 47%;
+        }
+    }
+    .MuiSwitch-sizeSmall{
+        width: 66px;
+        height: 39px;
+        .MuiSwitch-track{
+            border-radius: 15px;
+        }
+        .MuiSwitch-thumb{
+            width: 31px;
+            height: 31px;
+        }
+        .MuiSwitch-switchBase.Mui-checked{
+            transform: translateX(32px);
+        }
+    }
+}

@@ -1,0 +1,15 @@
+.myEventsContainer{
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 90%;
+    overflow: auto;
+    margin: 5% 0;
+    box-shadow: inset 0px 0px 16px 1px rgba(255,255,255,1);
+    position: relative;
+    &::-webkit-scrollbar{
+        width: 0px;
+        visibility: hidden;
+    }
+}

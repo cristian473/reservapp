@@ -4,13 +4,13 @@ import { Route, Switch, BrowserRouter } from 'react-router-dom'
 import Login from './componets/Login'
 import Home from './componets/Home'
 import InstitutionHome from './componets/InstitutionHome'
-import Event from './componets/Home/eventComponent'
+import Event from './componets/GlobalComponents/eventComponent'
 import CreateEvent from './componets/InstitutionHome/createEvent'
 import Settings from './componets/GlobalComponents/settings'
 import MyEvents from './componets/InstitutionHome/myEvents'
 
 function App() {
-  const userType = 'institution'
+  const userType = 'person'
   return (
     <div className="App">
       <BrowserRouter>
@@ -31,10 +31,6 @@ function App() {
               <Route exact path='/settings' component={Settings} />
             </>
           )}
-
-
-
-
         </Switch>
       </BrowserRouter>
     </div>

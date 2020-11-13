@@ -15,8 +15,8 @@ const LoginComponent = () => {
     return (
         <div className="FormContainer">
             <form onSubmit={handlerSubmit} >
-                <input required id='email' placeholder='Email' name='email' type="email" onChange={handlerInput} />
-                <input required id='password' placeholder='Contraseña' name='pass' type="password" onChange={handlerInput} />
+                <input className='customInput' required id='email' placeholder='Email' name='email' type="email" onChange={handlerInput} />
+                <input className='customInput' required id='password' placeholder='Contraseña' name='pass' type="password" onChange={handlerInput} />
                 <button type='submit' >Iniciar sesion</button>
             </form>
         </div>

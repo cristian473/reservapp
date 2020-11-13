@@ -39,21 +39,21 @@ const RegisterComponent = () => {
             </div>
             {registerType === 'person' && (
                 <form onSubmit={personSubmit} >
-                    <input required placeholder='Nombre y apellido' id='name' name='name' type="name" onChange={personInput} />
-                    <input required placeholder='Numero de telefono' id='tel' name='tel' type="number" onChange={personInput} />
-                    <input required placeholder='Correo electronico' id='email' name='email' type="email" onChange={personInput} />
-                    <input required placeholder='Contraseña' id='password' name='pass' type="password" onChange={personInput} />
-                    <input required placeholder='Repetir contraseña' id='repeatPass' name='repeatPass' type="password" onChange={personInput} />
+                    <input className='customInput' required placeholder='Nombre y apellido' id='name' name='name' type="name" onChange={personInput} />
+                    <input className='customInput' required placeholder='Numero de telefono' id='tel' name='tel' type="number" onChange={personInput} />
+                    <input className='customInput' required placeholder='Correo electronico' id='email' name='email' type="email" onChange={personInput} />
+                    <input className='customInput' required placeholder='Contraseña' id='password' name='pass' type="password" onChange={personInput} />
+                    <input className='customInput' required placeholder='Repetir contraseña' id='repeatPass' name='repeatPass' type="password" onChange={personInput} />
                     <button type='submit' >Registrarse</button>
                 </form>
             )}
             {registerType === 'institution' && (
                 <form onSubmit={institutionSubmit} >
-                    <input required placeholder='Nombre de la institucion' id='institutionName' name='institutionName' type="text" onChange={institutionInput} />
-                    <input required placeholder='Dirección' id='direction' name='direction' type="address" onChange={institutionInput} />
-                    <input required placeholder='Correo electronico' id='email' name='email' type="email" onChange={institutionInput} />
-                    <input required placeholder='Contraseña' id='password' name='pass' type="password" onChange={institutionInput} />
-                    <input required placeholder='Repetir contraseña' id='repeatPass' name='repeatPass' type="password" onChange={institutionInput} />
+                    <input className='customInput' required placeholder='Nombre de la institucion' id='institutionName' name='institutionName' type="text" onChange={institutionInput} />
+                    <input className='customInput' required placeholder='Dirección' id='direction' name='direction' type="address" onChange={institutionInput} />
+                    <input className='customInput' required placeholder='Correo electronico' id='email' name='email' type="email" onChange={institutionInput} />
+                    <input className='customInput' required placeholder='Contraseña' id='password' name='pass' type="password" onChange={institutionInput} />
+                    <input className='customInput' required placeholder='Repetir contraseña' id='repeatPass' name='repeatPass' type="password" onChange={institutionInput} />
                     <button type='submit' >Registrarse</button>
                 </form>
             )}

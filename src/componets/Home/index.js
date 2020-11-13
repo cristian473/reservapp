@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDay } from '@fortawesome/free-solid-svg-icons'
+import EventCard from '../GlobalComponents/eventCard'
 import '../../styles/homeStyles.scss'
 import { Link } from 'react-router-dom'
 const Home = () => {
@@ -54,26 +55,19 @@ const Home = () => {
                 {events.length > 0 && (
                     <div className='eventsContainer'>
                         {events.map(({ eventName, institutionName, date, code }) => (
-                            <Link to={`/event/${code}`}>
-                                <div className="event">
-                                    <span>
-                                        {`${eventName} en`}
-                                    </span>
-                                    <span>
-                                        {`${institutionName}`}
-                                    </span>
-                                    <span>
-                                        {`${date}`}
-                                    </span>
-                                </div>
-                            </Link>
+                            <EventCard
+                                eventName={eventName}
+                                institutionName={institutionName}
+                                date={date}
+                                code={code}
+                            />
                         ))}
                     </div>
                 )}
                 <div className="inputCode">
                     <h5>Codigo de institución o evento:</h5>
-                    <input type="text" placeholder='Ingresar código' value={code} onChange={(e) => setcode(e.target.value)} />
-                    {code.length > 0 && <button>Confirmar</button>}
+                    <input type="text" placeholder='Ingresar código' className='customInput' value={code} onChange={(e) => setcode(e.target.value)} />
+                    {code.length > 0 && <button className='customButton'>Confirmar</button>}
                 </div>
             </div>
         </div >

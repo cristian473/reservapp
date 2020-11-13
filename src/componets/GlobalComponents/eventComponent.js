@@ -1,5 +1,5 @@
 import React from 'react'
-import Screen from '../GlobalComponents/screen'
+import Screen from './screen'
 
 import '../../styles/eventComponent.scss'
 const Event = (props) => {
@@ -27,7 +27,7 @@ const Event = (props) => {
                     <h5>Sabado {event.date} a las {event.time}hs </h5>
                     <h5>Quedan {event.cuposDisponibles} cupos disponibles </h5>
                 </div>
-                <button>Reservar mi lugar</button>
+                <button className='customButton'>Reservar mi lugar</button>
             </div>
         </Screen>
     )
