@@ -4,6 +4,8 @@ import { MuiPickersUtilsProvider, DatePicker, TimePicker } from '@material-ui/pi
 import { Switch, FormControlLabel } from '@material-ui/core'
 import Input from '../GlobalComponents/input'
 import DateFnsUtils from '@date-io/date-fns';
+import { setEvent } from '../../database'
+import moment from 'moment'
 import '../../styles/createEvent.scss'
 const initialState = {
     eventName: '',
@@ -50,6 +52,9 @@ const CreateEvent = (props) => {
         }
     }
 
+    const handlerSubmit = () => {
+        setEvent(dataEvent)
+    }
     return (
         <Screen title={'Completá los datos:'} history={props.history}>
             <div className="createEventComponent">
@@ -85,7 +90,6 @@ const CreateEvent = (props) => {
                             name='time'
                             value={dataEvent.time}
                             onChange={(value) => handlerPicker(value, 'time')}
-
                         />
                     </MuiPickersUtilsProvider>
                 </div>
@@ -112,7 +116,7 @@ const CreateEvent = (props) => {
                     label="Formulario de covid antes de la reserva"
                     labelPlacement="top"
                 />
-                <button className='customButton'>
+                <button onClick={handlerSubmit} className='customButton'>
                     Crear
                 </button>
             </div>

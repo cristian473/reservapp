@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-
+import { createInstitution, createUser } from '../../database'
 const RegisterComponent = () => {
     const [input, setinputs] = useState({ name: '', tel: '', pass: '', repeatPass: '', email: '' })
-    const [insInput, setIntitutionInput] = useState({ institutionName: '', direction: '', pass: '', repeatPass: '', email: '' })
+    const [insInput, setIntitutionInput] = useState({ institutionName: '', address: '', pass: '', repeatPass: '', email: '' })
     const [registerType, setType] = useState('person')
 
     const institutionInput = (e) => {
@@ -15,13 +15,13 @@ const RegisterComponent = () => {
         setinputs({ ...input, [name]: value })
     }
 
-    const personSubmit = (e) => {
+    const personSubmit = async (e) => {
         e.preventDefault()
-        console.log(input);
+        await createUser(input);
     }
-    const institutionSubmit = (e) => {
+    const institutionSubmit = async (e) => {
         e.preventDefault()
-        console.log(insInput);
+        await createInstitution(insInput);
     }
     return (
         <div className="FormContainer">
@@ -50,7 +50,7 @@ const RegisterComponent = () => {
             {registerType === 'institution' && (
                 <form onSubmit={institutionSubmit} >
                     <input className='customInput' required placeholder='Nombre de la institucion' id='institutionName' name='institutionName' type="text" onChange={institutionInput} />
-                    <input className='customInput' required placeholder='Dirección' id='direction' name='direction' type="address" onChange={institutionInput} />
+                    <input className='customInput' required placeholder='Dirección' id='direction' name='address' type="address" onChange={institutionInput} />
                     <input className='customInput' required placeholder='Correo electronico' id='email' name='email' type="email" onChange={institutionInput} />
                     <input className='customInput' required placeholder='Contraseña' id='password' name='pass' type="password" onChange={institutionInput} />
                     <input className='customInput' required placeholder='Repetir contraseña' id='repeatPass' name='repeatPass' type="password" onChange={institutionInput} />

@@ -1,38 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDay } from '@fortawesome/free-solid-svg-icons'
 import EventCard from '../GlobalComponents/eventCard'
 import '../../styles/homeStyles.scss'
+import { getEvents, subscribeEventQuery, getEventsByInstitution, subscribeInstitutionQuery } from '../../database'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 const Home = () => {
+    const dispatch = useDispatch()
     const [code, setcode] = useState('')
-    const events = [
-        {
-            eventName: 'Reunión general',
-            institutionName: 'Comunidad CDT',
-            date: 'Sábado 18hs',
-            code: 3557
-        },
-        {
-            eventName: 'Reunión general',
-            institutionName: 'Comunidad CDT',
-            date: 'Sábado 18hs',
-            code: 3557
-        },
-        {
-            eventName: 'Reunión general',
-            institutionName: 'Comunidad CDT',
-            date: 'Sábado 18hs',
-            code: 3557
-        },
-        {
-            eventName: 'Reunión general',
-            institutionName: 'Comunidad CDT',
-            date: 'Sábado 18hs',
-            code: 3557
+    const { user, events } = useSelector((store) => store.user)
+    console.log(user);
+    useEffect(() => {
+        if (user.institution_subscribed && user.institution_subscribed.length > 0) {
+            dispatch(getEventsByInstitution(user.institution_subscribed))
         }
-    ]
-
+    }, [user])
+    const subscribeEvent = async () => {
+        let res = await subscribeInstitutionQuery(code, user)
+        console.log(res);
+    }
+    console.log(events);
     return (
         <div className="homeContainer">
             <div className="title">
@@ -67,7 +55,7 @@ const Home = () => {
                 <div className="inputCode">
                     <h5>Codigo de institución o evento:</h5>
                     <input type="text" placeholder='Ingresar código' className='customInput' value={code} onChange={(e) => setcode(e.target.value)} />
-                    {code.length > 0 && <button className='customButton'>Confirmar</button>}
+                    {code.length > 0 && <button onClick={subscribeEvent} className='customButton'>Confirmar</button>}
                 </div>
             </div>
         </div >
