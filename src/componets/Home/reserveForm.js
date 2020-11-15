@@ -5,45 +5,45 @@ import Screen from '../GlobalComponents/screen'
 import { useEffect } from 'react'
 
 const ReserveForm = ({ type, setInputStyles, sendReserve }) => {
-    const dispatch = useDispatch()
-    const [meForm, setMeform] = useState({ acceptFormCovid: '' })
-    const [otherForm, setotherForm] = useState({ personName: '', acceptFormCovid: '', contactWithPerson: '' })
-    const [familyForm, setfamilyForm] = useState({ familyName: '', acceptFormCovid: '', integrants_number: '' })
-    const [inputs, setInputs] = useState([])
-    const { user, integrants, eventInfo } = useSelector((store) => store.user)
-    const [modalOpen, setModalOpen] = useState(false)
+    const dispatch = useDispatch();
+    const [meForm, setMeform] = useState({ acceptFormCovid: '' });
+    const [otherForm, setotherForm] = useState({ personName: '', acceptFormCovid: '', contactWithPerson: '' });
+    const [familyForm, setfamilyForm] = useState({ familyName: '', acceptFormCovid: '', integrants_number: '' });
+    const [inputs, setInputs] = useState([]);
+    const { user, integrants, eventInfo } = useSelector((store) => store.user);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const handlerOther = (e) => {
         const { value, name } = e.target;
-        setotherForm({ ...otherForm, [name]: value })
+        setotherForm({ ...otherForm, [name]: value });
     }
     const handlerFamily = (e) => {
         const { value, name } = e.target;
-        setfamilyForm({ ...familyForm, [name]: value })
+        setfamilyForm({ ...familyForm, [name]: value });
     }
     const setConfirmFormCovid = (res) => {
         if (type === 'other') {
-            setotherForm({ ...otherForm, acceptFormCovid: res })
+            setotherForm({ ...otherForm, acceptFormCovid: res });
         }
         if (type === 'family') {
-            setfamilyForm({ ...familyForm, acceptFormCovid: res, integrants: integrants })
+            setfamilyForm({ ...familyForm, acceptFormCovid: res, integrants: integrants });
         }
         if (type === 'me') {
-            setMeform({ ...meForm, acceptFormCovid: res })
+            setMeform({ ...meForm, acceptFormCovid: res });
         }
     }
 
     const handlerInputsFamily = (e, i) => {
-        const { value } = e.target
-        let temp = [...integrants]
-        temp[i] = value
-        dispatch({ type: 'SET_INTEGRANTS', payload: temp })
+        const { value } = e.target;
+        let temp = [...integrants];
+        temp[i] = value;
+        dispatch({ type: 'SET_INTEGRANTS', payload: temp });
     }
 
     const inputsFamily = () => {
         if (familyForm.integrants_number > 0) {
-            let inputs = []
-            let integrantsSchema = []
+            let inputs = [];
+            let integrantsSchema = [];
             for (let i = 0; i < familyForm.integrants_number; i++) {
                 inputs.push(
                     <input
@@ -92,23 +92,19 @@ const ReserveForm = ({ type, setInputStyles, sendReserve }) => {
     const handlerConfirm = () => {
         let data = {}
         if (type === 'me') {
-            data = { ...meForm, registeredFor: user }
+            data = { ...meForm, code: eventInfo.code, registeredFor: user }
             sendReserve(type, data)
         }
         if (type === 'family') {
-            data = { ...familyForm, registeredFor: user }
+            data = { ...familyForm, code: eventInfo.code, registeredFor: user }
             sendReserve(type, data)
         }
         if (type === 'other') {
-            data = { ...otherForm, registeredFor: user }
+            data = { ...otherForm, code: eventInfo.code, registeredFor: user }
             sendReserve(type, data)
         }
 
     }
-    // console.log(meForm);
-    // console.log(otherForm);
-    // console.log(integrants);
-
     return (
         <div className="formContainer">
             {type === 'me' && (

@@ -5,7 +5,6 @@ export const setEvent = async (data, institution) => {
     let ref = await db.collection("events").orderBy("code", "desc").limit(1).get();
     var lastCode = parseInt(ref.docs[0].id) + 1
     let lastCodePadded = lastCode.pad(4)
-    console.log(data);
     const dataFormated = {
         ...data,
         time: moment(data.time).format('HH:mm'),
@@ -147,4 +146,18 @@ export const getEventByCode = (code) => {
                 dispatch({ type: 'GET_EVENTINFO', payload: dataEvent.data() })
             })
     }
+}
+
+export const SubscribeEvent = async (data) => {
+    db.collection(`events/${data.code}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') })
+        .then(async () => {
+            const res = await db.doc(`events/${data.code}`).get()
+            let { cupos_disponibles, cupos_ocupados } = res.data()
+            await db.doc(`events/${data.code}`).update({ cupos_disponibles: parseInt(cupos_disponibles) - 1, cupos_ocupados: parseInt(cupos_ocupados) + 1 })
+            return true
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+
 }

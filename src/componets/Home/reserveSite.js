@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Screen from '../GlobalComponents/screen'
 import ReserveForm from './reserveForm'
+import { SubscribeEvent } from '../../database'
 import '../../styles/reserveStyles.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserFriends, faUser, faUsers } from '@fortawesome/free-solid-svg-icons'
@@ -8,8 +9,11 @@ const ReserveSite = (props) => {
     const [siteFor, setFor] = useState('')
     const [inputsStyle, setInputStyles] = useState(false)
 
-    const handlerReserve = (type, data) => {
-        console.log(type, data);
+    const handlerReserve = async (type, data) => {
+        const res = await SubscribeEvent({ ...data, type: type })
+        if (res) {
+            console.log('subscripto con exito!');
+        }
     }
 
     return (
