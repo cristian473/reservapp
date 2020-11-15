@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import Screen from '../GlobalComponents/screen'
 import { MuiPickersUtilsProvider, DatePicker, TimePicker } from '@material-ui/pickers';
 import { Switch, FormControlLabel } from '@material-ui/core'
@@ -18,7 +19,7 @@ const initialState = {
 
 const CreateEvent = (props) => {
     const [dataEvent, setDataEvent] = useState(initialState)
-
+    const { user } = useSelector((store) => store.user)
     const handleInputChange = (e) => {
         const { value, name } = e.target
         setDataEvent({ ...dataEvent, [name]: value })
@@ -53,7 +54,7 @@ const CreateEvent = (props) => {
     }
 
     const handlerSubmit = () => {
-        setEvent(dataEvent)
+        setEvent(dataEvent, user)
     }
     return (
         <Screen title={'Completá los datos:'} history={props.history}>

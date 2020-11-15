@@ -1,59 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Screen from '../GlobalComponents/screen'
 import EventCard from '../GlobalComponents/eventCard'
 import '../../styles/myeventsStyles.scss'
+import { useSelector, useDispatch } from 'react-redux'
+import { getEventsToInstitution } from '../../database'
 const MyEvents = (props) => {
+    const dispatch = useDispatch()
+    const { events, user } = useSelector((store) => store.user)
 
-    const events = [
-        {
-            eventName: 'Reunión general',
-            institutionName: 'Comunidad CDT',
-            date: 'Sábado 18hs',
-            code: 3557
-        },
-        {
-            eventName: 'Reunión general',
-            institutionName: 'Comunidad CDT',
-            date: 'Sábado 18hs',
-            code: 3557
-        },
-        {
-            eventName: 'Reunión general',
-            institutionName: 'Comunidad CDT',
-            date: 'Sábado 18hs',
-            code: 3557
-        },
-        {
-            eventName: 'Reunión general',
-            institutionName: 'Comunidad CDT',
-            date: 'Sábado 18hs',
-            code: 3557
-        },
-        {
-            eventName: 'Reunión general',
-            institutionName: 'Comunidad CDT',
-            date: 'Sábado 18hs',
-            code: 3557
-        },
-        {
-            eventName: 'Reunión general',
-            institutionName: 'Comunidad CDT',
-            date: 'Sábado 18hs',
-            code: 3557
-        },
-        {
-            eventName: 'Reunión general',
-            institutionName: 'Comunidad CDT',
-            date: 'Sábado 18hs',
-            code: 3557
-        },
-        {
-            eventName: 'Reunión general',
-            institutionName: 'Comunidad CDT',
-            date: 'Sábado 18hs',
-            code: 3557
-        }
-    ]
+    useEffect(() => {
+        dispatch(getEventsToInstitution(user.email))
+    }, [])
 
     return (
         <Screen title='Mis Eventos' history={props.history}>

@@ -1,11 +1,24 @@
 import { db, auth } from '../firebase'
 import moment from 'moment'
 
-export const setEvent = async (data) => {
+export const setEvent = async (data, institution) => {
     let ref = await db.collection("events").orderBy("code", "desc").limit(1).get();
     var lastCode = parseInt(ref.docs[0].id) + 1
     let lastCodePadded = lastCode.pad(4)
-    await db.collection('events').doc(lastCodePadded).set({ ...data, code: lastCodePadded, cupos_ocupados: 0 })
+    console.log(data);
+    const dataFormated = {
+        ...data,
+        time: moment(data.time).format('HH:mm'),
+        date: moment(data.date).format('DD-MM-YYYY'),
+        institutionName: institution.institutionName,
+        creator_id: institution.creator_id,
+        creator_email: institution.email,
+        cupos_disponibles: data.cupos,
+        cupos_ocupados: 0,
+        code: lastCodePadded
+    }
+    console.log(dataFormated);
+    await db.collection('events').doc(lastCodePadded).set(dataFormated)
 }
 
 export const getEvents = async (email) => {
@@ -16,6 +29,20 @@ export const getEvents = async (email) => {
         dataEvents.push(data)
     })
     return dataEvents
+}
+
+export const getEventsToInstitution = (email) => {
+    return (dispatch) => {
+        db.collection('events').where('creator_email', '==', email).get()
+            .then((events) => {
+                let dataEvents = []
+                events.forEach((ev) => {
+                    const data = ev.data()
+                    dataEvents.push(data)
+                })
+                dispatch({ type: 'GET_EVENTS', payload: dataEvents })
+            })
+    }
 }
 
 export const createInstitution = async (data) => {
@@ -91,13 +118,12 @@ export const subscribeInstitutionQuery = async (code, user) => {
 }
 
 export const getEventsByInstitution = (email) => {
-    console.log(email);
     return (dispatch) => {
         function getData(snap) {
             return snap.docs.map(el => el.data())
         }
         db.collection('events')
-            .where('creator', '==', email[0])
+            .where('creator_email', '==', email[0])
             .onSnapshot((snap) => {
                 let data = getData(snap)
                 dispatch({ type: 'GET_EVENTS', payload: data })
@@ -109,8 +135,16 @@ export const getUserByEmail = (email) => {
     return (dispatch) => {
         db.collection('users').doc(email).get()
             .then((user) => {
-                console.log(user);
                 dispatch({ type: 'LOGGED', payload: user.data() })
+            })
+    }
+}
+
+export const getEventByCode = (code) => {
+    return (dispatch) => {
+        db.collection('events').doc(code).get()
+            .then((dataEvent) => {
+                dispatch({ type: 'GET_EVENTINFO', payload: dataEvent.data() })
             })
     }
 }

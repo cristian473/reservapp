@@ -2,15 +2,15 @@ import { REGISTERED, GET_STORES, LOGGED, GET_MOVIMIENTOS } from '../constants'
 
 const initialState = {
     user: {},
-    events: []
+    events: [],
+    eventInfo: {},
+    integrants: []
 }
 
 export function useReducer(state = initialState, { type, payload }) {
 
     switch (type) {
 
-        case REGISTERED:
-            return
         case LOGGED:
             return {
                 ...state,
@@ -21,11 +21,22 @@ export function useReducer(state = initialState, { type, payload }) {
                 ...state,
                 events: payload
             }
-        case GET_MOVIMIENTOS:
-            return
-        case 'SET_STORE':
-            return
-
+        case 'GET_EVENTINFO':
+            return {
+                ...state,
+                eventInfo: payload
+            }
+        case 'CLEAN_STATE':
+            localStorage.removeItem('u_data')
+            return {
+                ...state,
+                user: {}
+            }
+        case 'SET_INTEGRANTS':
+            return {
+                ...state,
+                integrants: payload
+            }
     }
 
 

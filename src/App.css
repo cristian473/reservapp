@@ -77,6 +77,11 @@
   outline: none;
 }
 
+.customButton.disabled{
+  background-color: rgb(193, 193, 255);
+  pointer-events:none;
+}
+
 a{
   text-decoration: none;
 }

@@ -1,20 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Screen from './screen'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { getEventByCode } from '../../database'
 import '../../styles/eventComponent.scss'
 const Event = (props) => {
+    const dispatch = useDispatch()
     const { match: { params: { code } } } = props;
-    const event = {
-        eventName: 'Reunión general',
-        institutionName: 'Comunidad CDT',
-        address: 'Libertad 3248, El Talar, Tigre',
-        date: '20/11/2020',
-        time: '18:00',
-        details: 'Por favor ingresar con barbijo',
-        cuposTotales: 30,
-        cuposDisponibles: 10,
-        code: 3557
+    const { eventInfo, user } = useSelector(state => state.user)
+    useEffect(() => {
+        if (code) {
+            dispatch(getEventByCode(code))
+        }
+    }, [code])
+
+    const handlerReserve = () => {
+        props.history.push(`/event/${code}/reserve`)
     }
+
     return (
         <Screen title={'Sobre el evento'} history={props.history}>
             <div className='eventContainer'>
@@ -22,12 +24,14 @@ const Event = (props) => {
                     <span>COD: {code}</span>
                 </div>
                 <div className="dataContainer">
-                    <h5>{event.eventName} en {event.institutionName}</h5>
-                    <h5>Dirección: {event.address}</h5>
-                    <h5>Sabado {event.date} a las {event.time}hs </h5>
-                    <h5>Quedan {event.cuposDisponibles} cupos disponibles </h5>
+                    <h5>{eventInfo.eventName} en {eventInfo.institutionName}</h5>
+                    <h5>Dirección: {eventInfo.address}</h5>
+                    <h5>Sabado {eventInfo.date} a las {eventInfo.time}hs </h5>
+                    <h5>Quedan {eventInfo.cupos_disponibles} cupos disponibles </h5>
                 </div>
-                <button className='customButton'>Reservar mi lugar</button>
+                {user.type !== 'institution' && (
+                    <button className='customButton' onClick={() => handlerReserve()} >Reservar mi lugar</button>
+                )}
             </div>
         </Screen>
     )

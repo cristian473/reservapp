@@ -10,7 +10,6 @@ const Home = () => {
     const dispatch = useDispatch()
     const [code, setcode] = useState('')
     const { user, events } = useSelector((store) => store.user)
-    console.log(user);
     useEffect(() => {
         if (user.institution_subscribed && user.institution_subscribed.length > 0) {
             dispatch(getEventsByInstitution(user.institution_subscribed))
@@ -18,9 +17,7 @@ const Home = () => {
     }, [user])
     const subscribeEvent = async () => {
         let res = await subscribeInstitutionQuery(code, user)
-        console.log(res);
     }
-    console.log(events);
     return (
         <div className="homeContainer">
             <div className="title">
