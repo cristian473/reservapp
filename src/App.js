@@ -10,6 +10,7 @@ import Settings from './componets/GlobalComponents/settings'
 import MyEvents from './componets/GlobalComponents/myEvents'
 import ReserveSite from './componets/Home/reserveSite'
 import myReservations from './componets/Home/myReservations'
+import ReservInfo from './componets/Home/reservInfo'
 import { getUserByDNI } from './database'
 import { useSelector, useDispatch } from 'react-redux'
 function App() {
@@ -51,6 +52,7 @@ function App() {
               <Route exact path='/next_events' component={MyEvents} />
               <Route exact path='/settings' component={Settings} />
               <Route exact path='/reservations' component={myReservations} />
+              <Route exact path='/reservation/:id' component={ReservInfo} />
 
             </>
           )}

@@ -199,4 +199,14 @@ export const getReservesToUser = async (dni) => {
         Swal.fire('Error!', 'Por favor intente nuevamente', 'error')
         console.log(error);
     }
-}   
+}
+
+export const getReservInfo = async (id, dni) => {
+    try {
+        const res = await db.doc(`users/${dni}/reservas/${id}`).get()
+        let reservInfo = res.data()
+        return reservInfo
+    } catch (err) {
+        console.log(err);
+    }
+}
