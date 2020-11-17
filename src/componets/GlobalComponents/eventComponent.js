@@ -3,6 +3,7 @@ import Screen from './screen'
 import { useDispatch, useSelector } from 'react-redux'
 import { getEventByCode } from '../../database'
 import '../../styles/eventComponent.scss'
+import { CircularProgress } from '@material-ui/core';
 const Event = (props) => {
     const dispatch = useDispatch()
     const { match: { params: { code } } } = props;
@@ -10,6 +11,9 @@ const Event = (props) => {
     useEffect(() => {
         if (code) {
             dispatch(getEventByCode(code))
+        }
+        return () => {
+            dispatch({ type: 'GET_EVENTINFO', payload: {} })
         }
     }, [code])
 
@@ -23,15 +27,21 @@ const Event = (props) => {
                 <div className="code">
                     <span>COD: {code}</span>
                 </div>
-                <div className="dataContainer">
-                    <h5>{eventInfo.eventName} en {eventInfo.institutionName}</h5>
-                    <h5>Dirección: {eventInfo.address}</h5>
-                    <h5>Sabado {eventInfo.date} a las {eventInfo.time}hs </h5>
-                    <h5>Quedan {`${eventInfo.cupos_disponibles}/${eventInfo.cupos}`} cupos disponibles </h5>
-                </div>
-                {user.type !== 'institution' && (
-                    <button className='customButton' onClick={() => handlerReserve()} >Reservar mi lugar</button>
-                )}
+                {eventInfo?.eventName ? (
+                    <>
+                        <div className="dataContainer">
+                            <h5>{eventInfo.eventName} en {eventInfo.institutionName}</h5>
+                            <h5>Dirección: {eventInfo.address}</h5>
+                            <h5>Sabado {eventInfo.date} a las {eventInfo.time}hs </h5>
+                            <h5>Quedan {`${eventInfo.cupos_disponibles}/${eventInfo.cupos}`} cupos disponibles </h5>
+                        </div>
+                        {user.type !== 'institution' && (
+                            <button className='customButton' onClick={() => handlerReserve()} >Reservar mi lugar</button>
+                        )}
+                    </>
+                ) : (
+                        <CircularProgress />
+                    )}
             </div>
         </Screen>
     )

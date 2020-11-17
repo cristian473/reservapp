@@ -3,6 +3,8 @@ import Screen from '../GlobalComponents/screen'
 import { useSelector } from 'react-redux'
 import { getReservInfo } from '../../database'
 import Swal from 'sweetalert2'
+import { CircularProgress } from '@material-ui/core'
+
 const ReservInfo = (props) => {
     const { user } = useSelector((store) => store.user)
     const { match: { params: { id } } } = props
@@ -15,14 +17,19 @@ const ReservInfo = (props) => {
     }, [user])
     return (
         <Screen history={props.history} title={`${res ? res.eventInfo.eventName : ''}`}>
-            {res && (
-                <div style={{ height: '100%' }} className="d-flex align-items-center justify-content-around flex-column">
-                    <h5>Direccion: {res.eventInfo.address}</h5>
-                    <h5>Fecha: {res.eventInfo.date} </h5>
-                    <h5>Hora: {res.eventInfo.time} </h5>
-                    <h5>Cupos reservados: {res.cupos_reservados} </h5>
-                </div>
-            )}
+            <div style={{ height: '100%' }} className="d-flex align-items-center justify-content-around flex-column">
+                {res ? (
+                    <>
+                        <h5>Direccion: {res.eventInfo.address}</h5>
+                        <h5>Fecha: {res.eventInfo.date} </h5>
+                        <h5>Hora: {res.eventInfo.time} </h5>
+                        <h5>Cupos reservados: {res.cupos_reservados} </h5>
+                    </>
+                ) : (
+                        <CircularProgress />
+                    )}
+
+            </div>
         </Screen>
     )
 }

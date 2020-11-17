@@ -3,7 +3,7 @@ import LoginComponent from './loginComponent'
 import RegisterComponent from './registerComponent'
 import '../../styles/loginStyles.scss'
 
-const Login = () => {
+const Login = (props) => {
     const [formType, setForm] = useState('initial')
     return (
         <div className="loginContainer">
@@ -18,7 +18,7 @@ const Login = () => {
                 <LoginComponent />
             )}
             {formType === 'register' && (
-                <RegisterComponent />
+                <RegisterComponent history={props.history} />
             )}
         </div>
     )

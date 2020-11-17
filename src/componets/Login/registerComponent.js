@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { createInstitution, createUser } from '../../database'
-const RegisterComponent = () => {
+const RegisterComponent = ({ history }) => {
     const [input, setinputs] = useState({ name: '', tel: '', dni: '', pass: '', repeatPass: '', email: '' })
     const [insInput, setIntitutionInput] = useState({ institutionName: '', address: '', pass: '', repeatPass: '', email: '' })
     const [registerType, setType] = useState('person')
@@ -17,11 +17,22 @@ const RegisterComponent = () => {
 
     const personSubmit = async (e) => {
         e.preventDefault()
-        await createUser(input);
+        let res = await createUser(input);
+        if (res) {
+            history.go()
+        } else {
+            return null
+        }
     }
     const institutionSubmit = async (e) => {
         e.preventDefault()
-        await createInstitution(insInput);
+        let res = await createInstitution(insInput);
+        console.log(res);
+        if (res) {
+            history.go()
+        } else {
+            return null
+        }
     }
     return (
         <div className="FormContainer">

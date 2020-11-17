@@ -53,7 +53,8 @@ export const createInstitution = async (data) => {
         auth.createUserWithEmailAndPassword(email, pass)
             .then(async () => {
                 await db.collection('users').doc(email).set({ institutionName, address, email, type: 'institution' })
-                Swal.fire('Éxito', 'usuario creado', "success")
+                await Swal.fire('Éxito', 'usuario creado', "success")
+                window.location.reload()
             })
             .catch((err) => {
                 if (err.code === 'auth/email-already-in-use') Swal.fire('Error', 'El usuario ya esta en uso', "error")
@@ -75,7 +76,8 @@ export const createUser = async (data) => {
         auth.createUserWithEmailAndPassword(newEmail, pass)
             .then(async () => {
                 await db.collection('users').doc(dni).set({ name, dni, tel, email, type: 'person', institution_subscribed: [] })
-                Swal.fire('Éxito', 'usuario creado', "success")
+                await Swal.fire('Éxito', 'usuario creado', "success")
+                window.location.reload()
             })
             .catch((err) => {
                 if (err.code === 'auth/email-already-in-use') Swal.fire('Error', 'El usuario ya esta en uso', "error")
@@ -89,13 +91,19 @@ export const createUser = async (data) => {
 export const authenticate = async (data) => {
     const { DNI, pass } = data
     let userLoged = false
-    let newEmail = `${DNI.replace(/\./g, '')}@reservip.com`
-    console.log(newEmail);
+    let newEmail = DNI;
+    if (!DNI.includes('@')) {
+        newEmail = `${DNI.replace(/\./g, '')}@reservip.com`
+    }
     await auth.signInWithEmailAndPassword(newEmail, pass)
         .then(async () => {
-            let user = await db.collection('users').doc(DNI.replace(/\./g, '')).get()
+            let user;
+            if (!DNI.includes('@')) {
+                user = await db.collection('users').doc(DNI.replace(/\./g, '')).get()
+            } else {
+                user = await db.collection('users').doc(DNI).get()
+            }
             userLoged = user.data();
-            console.log(userLoged);
         })
         .catch((err) => {
             console.log(err);
@@ -108,7 +116,6 @@ export const subscribeEventQuery = async (code, user) => {
     let ref = db.collection('events').doc(code)
     let event = await ref.get()
     let operation = false
-    console.log(event);
     if (!event.exists) {
         console.log('no existe');
     } else {

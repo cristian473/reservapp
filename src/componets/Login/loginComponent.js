@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { authenticate } from '../../database'
 import { useDispatch } from 'react-redux'
+import Swal from 'sweetalert2'
 const LoginComponent = () => {
     const dispatch = useDispatch()
     const [input, setinputs] = useState({ DNI: '', pass: '' })
@@ -12,12 +13,18 @@ const LoginComponent = () => {
 
     const handlerSubmit = async (e) => {
         e.preventDefault()
+        Swal.showLoading()
         let user = await authenticate(input)
-        if (user) {
+        if (user && user.dni) {
             localStorage.setItem('u_data', JSON.stringify(user.dni.replace(/\./, '')))
             dispatch({ type: 'LOGGED', payload: user })
+            Swal.close()
+        } else if (user && !user.dni) {
+            localStorage.setItem('u_data', JSON.stringify(user))
+            dispatch({ type: 'LOGGED', payload: user })
+            Swal.close()
         } else {
-            console.error(user);
+            console.log(user);
         }
     }
     return (

@@ -62,6 +62,10 @@
    font-size: 5vw;
 }
 
+.swal2-popup{
+      height: 15em
+}
+
 .customButton{
   width: 80%;
    font-size: 5vw;
