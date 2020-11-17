@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarDay, faBookmark } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarDay, faBookmark, faCog } from '@fortawesome/free-solid-svg-icons'
 import EventCard from '../GlobalComponents/eventCard'
 import '../../styles/homeStyles.scss'
 import '../../styles/institutionStyles.scss'
@@ -17,15 +17,6 @@ const Home = (props) => {
             dispatch(getEventsByInstitution(user.institution_subscribed))
         }
     }, [user])
-    const subscribeEvent = async () => {
-        Swal.showLoading()
-        let res = await subscribeInstitutionQuery(code, user)
-        if (res) {
-            Swal.fire('Éxito!', `ahora puedes ver los eventos de ${res}`, 'success')
-        } else {
-            Swal.fire('Error!', `Código inválido`, 'error')
-        }
-    }
     const redirectTo = (path) => {
         props.history.push(path)
     }
@@ -38,8 +29,20 @@ const Home = (props) => {
                 </h2>
             </div>
             <div className={`body ${code.length > 0 && 'typingCode'}`} >
+                <div className="option createEvent" onClick={() => redirectTo('/next_events')} >
+                    <FontAwesomeIcon icon={faCalendarDay} />
+                    <h5>Próximos eventos</h5>
+                </div>
+                <div className="option" onClick={() => redirectTo('/reservations')}>
+                    <FontAwesomeIcon icon={faBookmark} />
+                    <h5>Mis reservas</h5>
+                </div>
+                <div className="option" onClick={() => redirectTo('/settings')}>
+                    <FontAwesomeIcon icon={faCog} />
+                    <h5>Configuraciones</h5>
+                </div>
 
-                {events.length === 0 && (
+                {/* {events.length === 0 && (
                     <>
                         <div className="myEvents">
                             <FontAwesomeIcon icon={faCalendarDay} />
@@ -63,7 +66,7 @@ const Home = (props) => {
                     <input type="text" placeholder='Ingresar código' className='customInput' value={code} onChange={(e) => setcode(e.target.value)} />
                     {code.length > 0 && <button onClick={subscribeEvent} className='customButton'>Confirmar</button>}
                 </div>
-                <button className='customButton' onClick={() => dispatch({ type: 'CLEAN_STATE' })} >Cerrar sesión</button>
+                <button className='customButton' onClick={() => dispatch({ type: 'CLEAN_STATE' })} >Cerrar sesión</button> */}
             </div>
         </div >
     )

@@ -4,7 +4,8 @@ const initialState = {
     user: {},
     events: [],
     eventInfo: {},
-    integrants: []
+    integrants: [],
+    myReserves: []
 }
 
 export function useReducer(state = initialState, { type, payload }) {
@@ -36,6 +37,11 @@ export function useReducer(state = initialState, { type, payload }) {
             return {
                 ...state,
                 integrants: payload
+            }
+        case 'SET_RESERVES':
+            return {
+                ...state,
+                myReserves: payload
             }
     }
 

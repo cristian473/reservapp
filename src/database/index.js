@@ -45,42 +45,61 @@ export const getEventsToInstitution = (email) => {
 }
 
 export const createInstitution = async (data) => {
-    const { institutionName, email, pass, address } = data
-    console.log(data);
-    auth.createUserWithEmailAndPassword(email, pass)
-        .then(async () => {
-            await db.collection('users').doc(email).set({ institutionName, address, email, type: 'institution' })
-            console.log('creado');
-        })
-        .catch((err) => {
-
-            console.log(err);
-        })
+    const { institutionName, email, pass, address, repeatPass } = data
+    if (pass !== repeatPass) {
+        await Swal.fire('Error', 'Las contraseñas no coinciden', 'error')
+        return null
+    } else {
+        auth.createUserWithEmailAndPassword(email, pass)
+            .then(async () => {
+                await db.collection('users').doc(email).set({ institutionName, address, email, type: 'institution' })
+                Swal.fire('Éxito', 'usuario creado', "success")
+            })
+            .catch((err) => {
+                if (err.code === 'auth/email-already-in-use') Swal.fire('Error', 'El usuario ya esta en uso', "error")
+                else {
+                    Swal.fire('Error', 'Por favor intente nuevamente', "error")
+                }
+            })
+    }
 }
 
 export const createUser = async (data) => {
-    const { name, email, pass, tel } = data
-    auth.createUserWithEmailAndPassword(email, pass)
-        .then(async () => {
-            await db.collection('users').doc(email).set({ name, tel, email, type: 'person', institution_subscribed: [] })
-            console.log('creado');
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+    const { name, email, dni, pass, tel, repeatPass } = data
+    if (pass !== repeatPass) {
+        await Swal.fire('Error', 'Las contraseñas no coinciden', 'error')
+        return null
+    } else {
+
+        let newEmail = `${dni.replace(/\./g, '')}@reservip.com`
+        auth.createUserWithEmailAndPassword(newEmail, pass)
+            .then(async () => {
+                await db.collection('users').doc(dni).set({ name, dni, tel, email, type: 'person', institution_subscribed: [] })
+                Swal.fire('Éxito', 'usuario creado', "success")
+            })
+            .catch((err) => {
+                if (err.code === 'auth/email-already-in-use') Swal.fire('Error', 'El usuario ya esta en uso', "error")
+                else {
+                    Swal.fire('Error', 'Por favor intente nuevamente', "error")
+                }
+            })
+    }
 }
 
 export const authenticate = async (data) => {
-    const { email, pass } = data
+    const { DNI, pass } = data
     let userLoged = false
-    await auth.signInWithEmailAndPassword(email, pass)
+    let newEmail = `${DNI.replace(/\./g, '')}@reservip.com`
+    console.log(newEmail);
+    await auth.signInWithEmailAndPassword(newEmail, pass)
         .then(async () => {
-            let user = await db.collection('users').doc(email).get()
+            let user = await db.collection('users').doc(DNI.replace(/\./g, '')).get()
             userLoged = user.data();
+            console.log(userLoged);
         })
         .catch((err) => {
-            Swal.fire('Error', 'Por favor verifique las credenciales e intente nuevamente', 'error')
             console.log(err);
+            Swal.fire('Error', 'Por favor verifique las credenciales e intente nuevamente', 'error')
         })
     return userLoged
 }
@@ -100,14 +119,14 @@ export const subscribeEventQuery = async (code, user) => {
 }
 
 export const subscribeInstitutionQuery = async (code, user) => {
-    let institution = await db.collection('users').where('creator_id', '==', code).get()
+    let institution = await db.collection('users').where('creator_id', '==', code.toUpperCase()).get()
     if (institution.docs.length > 0) {
         try {
             institution = institution.docs[0].data()
-            let userFromFirebase = await db.collection('users').doc(user.email).get()
+            let userFromFirebase = await db.collection('users').doc(user.dni).get()
             let { institution_subscribed } = userFromFirebase.data()
             institution_subscribed.push(institution.email)
-            await db.collection('users').doc(user.email).update(`institution_subscribed`, institution_subscribed)
+            await db.collection('users').doc(user.dni).update(`institution_subscribed`, institution_subscribed)
             return institution.institutionName
         } catch (error) {
             console.log(error);
@@ -115,7 +134,6 @@ export const subscribeInstitutionQuery = async (code, user) => {
     } else {
         return false
     }
-
 }
 
 export const getEventsByInstitution = (email) => {
@@ -132,9 +150,9 @@ export const getEventsByInstitution = (email) => {
     }
 }
 
-export const getUserByEmail = (email) => {
+export const getUserByDNI = (dni) => {
     return (dispatch) => {
-        db.collection('users').doc(email).get()
+        db.collection('users').doc(dni).get()
             .then((user) => {
                 dispatch({ type: 'LOGGED', payload: user.data() })
             })
@@ -152,19 +170,33 @@ export const getEventByCode = (code) => {
 
 export const SubscribeEvent = async (data) => {
     let respuesta = false
-    let promises = Promise.all([
-        db.collection(`events/${data.eventInfo.code}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') }),
-        db.collection(`users/${data.registeredFor.email}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') })
-    ])
-    promises
-        .then(async () => {
-            const res = await db.doc(`events/${data.eventInfo.code}`).get()
-            let { cupos_disponibles, cupos_ocupados } = res.data()
+    try {
+        await db.collection(`events/${data.eventInfo.code}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') })
+        await db.collection(`users/${data.registeredFor.dni}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') })
+        const res = await db.doc(`events/${data.eventInfo.code}`).get()
+        let { cupos_disponibles, cupos_ocupados } = res.data()
+        if (data.type === 'family') {
+            await db.doc(`events/${data.eventInfo.code}`).update({ cupos_disponibles: parseInt(cupos_disponibles) - parseInt(data.integrants_number), cupos_ocupados: parseInt(cupos_ocupados) + parseInt(data.integrants_number) })
+        } else {
             await db.doc(`events/${data.eventInfo.code}`).update({ cupos_disponibles: parseInt(cupos_disponibles) - 1, cupos_ocupados: parseInt(cupos_ocupados) + 1 })
-            respuesta = true
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+        }
+        respuesta = true
+    } catch (error) {
+        console.log(error);
+    }
     return respuesta
 }
+
+export const getReservesToUser = async (dni) => {
+    try {
+        const res = await db.collection(`users/${dni}/reservas`).get()
+        let reservas = res.docs.map(el => {
+            return { ...el.data(), id: el.id }
+        })
+        console.log(reservas);
+        return reservas
+    } catch (error) {
+        Swal.fire('Error!', 'Por favor intente nuevamente', 'error')
+        console.log(error);
+    }
+}   

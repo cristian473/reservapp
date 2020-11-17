@@ -17,7 +17,6 @@ const ReserveSite = (props) => {
             Swal.fire('Éxito!', ``, 'success')
         } else {
             Swal.fire('Error!', `intente nuevamente`, 'error')
-
         }
     }
 

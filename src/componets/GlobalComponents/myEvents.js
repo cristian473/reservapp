@@ -7,7 +7,7 @@ import { getEventsToInstitution, getEventsByInstitution } from '../../database'
 const MyEvents = (props) => {
     const dispatch = useDispatch()
     const { events, user } = useSelector((store) => store.user)
-
+    console.log(user);
     useEffect(() => {
         if (user.type === 'institution') {
             dispatch(getEventsToInstitution(user.email))
@@ -17,7 +17,7 @@ const MyEvents = (props) => {
     }, [])
 
     return (
-        <Screen title='Mis Eventos' history={props.history}>
+        <Screen title={`${user.type === 'person' ? 'Próximos eventos' : 'Mis eventos'}`} history={props.history}>
             <div className="myEventsContainer">
                 {events.map(({ eventName, institutionName, date, code }) => (
                     <EventCard

@@ -23,13 +23,13 @@ const ReserveForm = ({ type, setInputStyles, sendReserve }) => {
     }
     const setConfirmFormCovid = (res) => {
         if (type === 'other') {
-            setotherForm({ ...otherForm, acceptFormCovid: res });
+            setotherForm({ ...otherForm, acceptFormCovid: res, cupos_reservados: 1 });
         }
         if (type === 'family') {
-            setfamilyForm({ ...familyForm, acceptFormCovid: res, integrants: integrants });
+            setfamilyForm({ ...familyForm, acceptFormCovid: res, integrants: integrants, cupos_reservados: familyForm.integrants_number });
         }
         if (type === 'me') {
-            setMeform({ ...meForm, acceptFormCovid: res });
+            setMeform({ ...meForm, acceptFormCovid: res, cupos_reservados: 1 });
         }
     }
 

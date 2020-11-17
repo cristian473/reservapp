@@ -9,14 +9,15 @@ import CreateEvent from './componets/InstitutionHome/createEvent'
 import Settings from './componets/GlobalComponents/settings'
 import MyEvents from './componets/GlobalComponents/myEvents'
 import ReserveSite from './componets/Home/reserveSite'
-import { getUserByEmail } from './database'
+import myReservations from './componets/Home/myReservations'
+import { getUserByDNI } from './database'
 import { useSelector, useDispatch } from 'react-redux'
 function App() {
   const dispatch = useDispatch();
   let { type } = useSelector(({ user }) => user.user)
   if (!type && localStorage.getItem('u_data')) {
     let userFromCache = JSON.parse(localStorage.getItem('u_data'))
-    dispatch(getUserByEmail(userFromCache))
+    dispatch(getUserByDNI(userFromCache))
   }
 
   Number.prototype.pad = function (size) {
@@ -47,7 +48,9 @@ function App() {
               <Route exact path='/' component={Home} />
               <Route exact path='/event/:code' component={Event} />
               <Route exact path='/event/:code/reserve' component={ReserveSite} />
-              <Route exact path='/my_events' component={MyEvents} />
+              <Route exact path='/next_events' component={MyEvents} />
+              <Route exact path='/settings' component={Settings} />
+              <Route exact path='/reservations' component={myReservations} />
 
             </>
           )}
