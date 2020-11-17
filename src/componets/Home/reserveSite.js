@@ -14,7 +14,8 @@ const ReserveSite = (props) => {
         Swal.showLoading()
         const res = await SubscribeEvent({ ...data, type: type })
         if (res) {
-            Swal.fire('Éxito!', ``, 'success')
+            await Swal.fire('Éxito!', ``, 'success')
+            props.history.push('/')
         } else {
             Swal.fire('Error!', `intente nuevamente`, 'error')
         }
