@@ -5,14 +5,19 @@ import { SubscribeEvent } from '../../database'
 import '../../styles/reserveStyles.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserFriends, faUser, faUsers } from '@fortawesome/free-solid-svg-icons'
+import Swal from 'sweetalert2'
 const ReserveSite = (props) => {
     const [siteFor, setFor] = useState('')
     const [inputsStyle, setInputStyles] = useState(false)
 
     const handlerReserve = async (type, data) => {
+        Swal.showLoading()
         const res = await SubscribeEvent({ ...data, type: type })
         if (res) {
-            console.log('subscripto con exito!');
+            Swal.fire('Éxito!', ``, 'success')
+        } else {
+            Swal.fire('Error!', `intente nuevamente`, 'error')
+
         }
     }
 

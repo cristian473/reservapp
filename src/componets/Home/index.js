@@ -7,6 +7,7 @@ import '../../styles/institutionStyles.scss'
 import { getEvents, subscribeEventQuery, getEventsByInstitution, subscribeInstitutionQuery } from '../../database'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 const Home = (props) => {
     const dispatch = useDispatch()
     const [code, setcode] = useState('')
@@ -17,7 +18,13 @@ const Home = (props) => {
         }
     }, [user])
     const subscribeEvent = async () => {
+        Swal.showLoading()
         let res = await subscribeInstitutionQuery(code, user)
+        if (res) {
+            Swal.fire('Éxito!', `ahora puedes ver los eventos de ${res}`, 'success')
+        } else {
+            Swal.fire('Error!', `Código inválido`, 'error')
+        }
     }
     const redirectTo = (path) => {
         props.history.push(path)

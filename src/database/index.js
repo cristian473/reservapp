@@ -1,6 +1,6 @@
 import { db, auth } from '../firebase'
 import moment from 'moment'
-
+import Swal from 'sweetalert2'
 export const setEvent = async (data, institution) => {
     let ref = await db.collection("events").orderBy("code", "desc").limit(1).get();
     var lastCode = parseInt(ref.docs[0].id) + 1
@@ -53,6 +53,7 @@ export const createInstitution = async (data) => {
             console.log('creado');
         })
         .catch((err) => {
+
             console.log(err);
         })
 }
@@ -78,6 +79,7 @@ export const authenticate = async (data) => {
             userLoged = user.data();
         })
         .catch((err) => {
+            Swal.fire('Error', 'Por favor verifique las credenciales e intente nuevamente', 'error')
             console.log(err);
         })
     return userLoged
@@ -106,7 +108,7 @@ export const subscribeInstitutionQuery = async (code, user) => {
             let { institution_subscribed } = userFromFirebase.data()
             institution_subscribed.push(institution.email)
             await db.collection('users').doc(user.email).update(`institution_subscribed`, institution_subscribed)
-            return true
+            return institution.institutionName
         } catch (error) {
             console.log(error);
         }
@@ -149,6 +151,7 @@ export const getEventByCode = (code) => {
 }
 
 export const SubscribeEvent = async (data) => {
+    let respuesta = false
     let promises = Promise.all([
         db.collection(`events/${data.eventInfo.code}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') }),
         db.collection(`users/${data.registeredFor.email}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') })
@@ -158,10 +161,10 @@ export const SubscribeEvent = async (data) => {
             const res = await db.doc(`events/${data.eventInfo.code}`).get()
             let { cupos_disponibles, cupos_ocupados } = res.data()
             await db.doc(`events/${data.eventInfo.code}`).update({ cupos_disponibles: parseInt(cupos_disponibles) - 1, cupos_ocupados: parseInt(cupos_ocupados) + 1 })
-            return true
+            respuesta = true
         })
         .catch((err) => {
             console.log(err);
         })
-
+    return respuesta
 }
