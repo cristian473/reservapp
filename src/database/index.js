@@ -149,11 +149,15 @@ export const getEventByCode = (code) => {
 }
 
 export const SubscribeEvent = async (data) => {
-    db.collection(`events/${data.code}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') })
+    let promises = Promise.all([
+        db.collection(`events/${data.eventInfo.code}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') }),
+        db.collection(`users/${data.registeredFor.email}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') })
+    ])
+    promises
         .then(async () => {
-            const res = await db.doc(`events/${data.code}`).get()
+            const res = await db.doc(`events/${data.eventInfo.code}`).get()
             let { cupos_disponibles, cupos_ocupados } = res.data()
-            await db.doc(`events/${data.code}`).update({ cupos_disponibles: parseInt(cupos_disponibles) - 1, cupos_ocupados: parseInt(cupos_ocupados) + 1 })
+            await db.doc(`events/${data.eventInfo.code}`).update({ cupos_disponibles: parseInt(cupos_disponibles) - 1, cupos_ocupados: parseInt(cupos_ocupados) + 1 })
             return true
         })
         .catch((err) => {

@@ -92,15 +92,15 @@ const ReserveForm = ({ type, setInputStyles, sendReserve }) => {
     const handlerConfirm = () => {
         let data = {}
         if (type === 'me') {
-            data = { ...meForm, code: eventInfo.code, registeredFor: user }
+            data = { ...meForm, eventInfo: eventInfo, registeredFor: user }
             sendReserve(type, data)
         }
         if (type === 'family') {
-            data = { ...familyForm, code: eventInfo.code, registeredFor: user }
+            data = { ...familyForm, eventInfo: eventInfo, registeredFor: user }
             sendReserve(type, data)
         }
         if (type === 'other') {
-            data = { ...otherForm, code: eventInfo.code, registeredFor: user }
+            data = { ...otherForm, eventInfo: eventInfo, registeredFor: user }
             sendReserve(type, data)
         }
 

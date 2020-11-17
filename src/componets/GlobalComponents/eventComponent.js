@@ -27,7 +27,7 @@ const Event = (props) => {
                     <h5>{eventInfo.eventName} en {eventInfo.institutionName}</h5>
                     <h5>Dirección: {eventInfo.address}</h5>
                     <h5>Sabado {eventInfo.date} a las {eventInfo.time}hs </h5>
-                    <h5>Quedan {eventInfo.cupos_disponibles} cupos disponibles </h5>
+                    <h5>Quedan {`${eventInfo.cupos_disponibles}/${eventInfo.cupos}`} cupos disponibles </h5>
                 </div>
                 {user.type !== 'institution' && (
                     <button className='customButton' onClick={() => handlerReserve()} >Reservar mi lugar</button>

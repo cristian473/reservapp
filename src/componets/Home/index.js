@@ -22,6 +22,7 @@ const Home = (props) => {
     const redirectTo = (path) => {
         props.history.push(path)
     }
+
     return (
         <div className="homeContainer">
             <div className="title">
@@ -55,6 +56,7 @@ const Home = (props) => {
                     <input type="text" placeholder='Ingresar código' className='customInput' value={code} onChange={(e) => setcode(e.target.value)} />
                     {code.length > 0 && <button onClick={subscribeEvent} className='customButton'>Confirmar</button>}
                 </div>
+                <button className='customButton' onClick={() => dispatch({ type: 'CLEAN_STATE' })} >Cerrar sesión</button>
             </div>
         </div >
     )
