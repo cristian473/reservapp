@@ -12,9 +12,6 @@ const Event = (props) => {
         if (code) {
             dispatch(getEventByCode(code))
         }
-        return () => {
-            dispatch({ type: 'GET_EVENTINFO', payload: {} })
-        }
     }, [code])
 
     const handlerReserve = () => {

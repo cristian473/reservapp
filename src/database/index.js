@@ -177,6 +177,7 @@ export const getEventByCode = (code) => {
 
 export const SubscribeEvent = async (data) => {
     let respuesta = false
+    console.log(data);
     try {
         await db.collection(`events/${data.eventInfo.code}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') })
         await db.collection(`users/${data.registeredFor.dni}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') })
