@@ -61,7 +61,7 @@ export const createUser = async (data) => {
     const { name, email, pass, tel } = data
     auth.createUserWithEmailAndPassword(email, pass)
         .then(async () => {
-            await db.collection('users').doc(email).set({ name, tel, email, type: 'person' })
+            await db.collection('users').doc(email).set({ name, tel, email, type: 'person', institution_subscribed: [] })
             console.log('creado');
         })
         .catch((err) => {

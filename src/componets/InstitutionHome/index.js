@@ -5,11 +5,6 @@ import '../../styles/institutionStyles.scss'
 import Screen from '../GlobalComponents/screen'
 const InstitutionHome = (props) => {
 
-    const institution = {
-        institutionName: '',
-        direction: '',
-        email: ''
-    }
     const redirectTo = (path) => {
         props.history.push(path)
     }

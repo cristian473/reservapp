@@ -16,6 +16,10 @@
         width: 80%;
         height: 70vh;
         border-radius: 10px;
+        display: flex;
+        justify-content: space-evenly;
+        flex-direction: column;
+        align-items: center;
         .myEvents{
             display: flex;
             align-items: center;
@@ -61,6 +65,25 @@
             &.noEvents{
 
             }
+        }
+        .option{
+            width: 60%;
+            background-color: #ffffff;
+            height: 25%;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            flex-direction: column;
+            box-shadow: 0px 0px 6px -2px rgba(0,0,0,0.75);
+            font-size: 6vw;
+            h5{
+                margin-top: 10px;
+            }   
+            &.createEvent{
+                background-color: darkblue;
+                color: #ffffff;
+            }        
         }
         .inputCode{
             height: 20%;

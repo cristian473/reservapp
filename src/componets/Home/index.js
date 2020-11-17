@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarDay } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarDay, faBookmark } from '@fortawesome/free-solid-svg-icons'
 import EventCard from '../GlobalComponents/eventCard'
 import '../../styles/homeStyles.scss'
+import '../../styles/institutionStyles.scss'
 import { getEvents, subscribeEventQuery, getEventsByInstitution, subscribeInstitutionQuery } from '../../database'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-const Home = () => {
+const Home = (props) => {
     const dispatch = useDispatch()
     const [code, setcode] = useState('')
     const { user, events } = useSelector((store) => store.user)
@@ -18,35 +19,35 @@ const Home = () => {
     const subscribeEvent = async () => {
         let res = await subscribeInstitutionQuery(code, user)
     }
+    const redirectTo = (path) => {
+        props.history.push(path)
+    }
     return (
         <div className="homeContainer">
             <div className="title">
                 <h2>
-                    Hola, cristian!
+                    {`Hola, ${user.name.split(' ')[0]}!`}
                 </h2>
             </div>
             <div className={`body ${code.length > 0 && 'typingCode'}`} >
-                <div className="myEvents">
-                    <FontAwesomeIcon icon={faCalendarDay} />
-                    <h5>Mis eventos</h5>
-                </div>
+
                 {events.length === 0 && (
-                    <div className="eventsContainer">
-                        <h5 className='noEvents'>
-                            No tienes eventos aún
-                        </h5>
-                    </div>
+                    <>
+                        <div className="myEvents">
+                            <FontAwesomeIcon icon={faCalendarDay} />
+                            <h5>Mis eventos</h5>
+                        </div>
+                        <div className="eventsContainer">
+                            <h5 className='noEvents'>
+                                No tienes eventos aún
+                            </h5>
+                        </div>
+                    </>
                 )}
                 {events.length > 0 && (
-                    <div className='eventsContainer'>
-                        {events.map(({ eventName, institutionName, date, code }) => (
-                            <EventCard
-                                eventName={eventName}
-                                institutionName={institutionName}
-                                date={date}
-                                code={code}
-                            />
-                        ))}
+                    <div className="option" onClick={() => redirectTo('/my_events')}>
+                        <FontAwesomeIcon icon={faBookmark} />
+                        <h5>Mis eventos</h5>
                     </div>
                 )}
                 <div className="inputCode">
@@ -58,5 +59,4 @@ const Home = () => {
         </div >
     )
 }
-
 export default Home
