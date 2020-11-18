@@ -13,10 +13,10 @@ const ReserveSite = (props) => {
     const handlerReserve = async (type, data) => {
         Swal.showLoading()
         const res = await SubscribeEvent({ ...data, type: type })
-        if (res) {
+        if (res === true) {
             await Swal.fire('Éxito!', ``, 'success')
             props.history.push('/')
-        } else {
+        } else if (res === false) {
             Swal.fire('Error!', `intente nuevamente`, 'error')
         }
     }

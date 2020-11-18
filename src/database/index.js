@@ -177,8 +177,11 @@ export const getEventByCode = (code) => {
 
 export const SubscribeEvent = async (data) => {
     let respuesta = false
-    console.log(data);
     try {
+        if (data.type === 'me') {
+            let res = await db.collection(`users/${data.registeredFor.dni}/reservas`).where('eventInfo.code', '==', data.eventInfo.code).get()
+            if (!res.empty) throw 'Ya tiene un cupo reservado para este evento'
+        }
         await db.collection(`events/${data.eventInfo.code}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') })
         await db.collection(`users/${data.registeredFor.dni}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') })
         const res = await db.doc(`events/${data.eventInfo.code}`).get()
@@ -189,8 +192,10 @@ export const SubscribeEvent = async (data) => {
             await db.doc(`events/${data.eventInfo.code}`).update({ cupos_disponibles: parseInt(cupos_disponibles) - 1, cupos_ocupados: parseInt(cupos_ocupados) + 1 })
         }
         respuesta = true
+
     } catch (error) {
-        console.log(error);
+        Swal.fire('Error!', error, 'error')
+        respuesta = undefined
     }
     return respuesta
 }
