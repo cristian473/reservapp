@@ -192,7 +192,6 @@ export const SubscribeEvent = async (data) => {
             await db.doc(`events/${data.eventInfo.code}`).update({ cupos_disponibles: parseInt(cupos_disponibles) - 1, cupos_ocupados: parseInt(cupos_ocupados) + 1 })
         }
         respuesta = true
-
     } catch (error) {
         Swal.fire('Error!', error, 'error')
         respuesta = undefined
