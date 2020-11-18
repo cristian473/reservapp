@@ -13,7 +13,7 @@ const Screen = ({ title, children, history, arrowBack = true, extendBody }) => {
                 </div>
             )}
             <div className="title">
-                <h2>{title}</h2>
+                <h3>{title}</h3>
             </div>
             <div className={`body ${extendBody && 'extendBody'}`}>
                 {children}

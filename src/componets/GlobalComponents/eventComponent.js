@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getEventByCode } from '../../database'
 import '../../styles/eventComponent.scss'
 import { CircularProgress } from '@material-ui/core';
+import moment from 'moment'
+import 'moment/locale/es';
 const Event = (props) => {
     const dispatch = useDispatch()
     const { match: { params: { code } } } = props;
@@ -13,9 +15,18 @@ const Event = (props) => {
             dispatch(getEventByCode(code))
         }
     }, [code])
-
     const handlerReserve = () => {
         props.history.push(`/event/${code}/reserve`)
+    }
+
+    const dateToDay = (date) => {
+        let d = date.split('-')
+        d = jsUcfirst(moment(`${d[2]}/${d[1]}/${d[0]}`).locale('es').format('dddd'))
+        return d
+    }
+
+    function jsUcfirst(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     return (
@@ -29,11 +40,11 @@ const Event = (props) => {
                         <div className="dataContainer">
                             <h5>{eventInfo.eventName} en {eventInfo.institutionName}</h5>
                             <h5>Dirección: {eventInfo.address}</h5>
-                            <h5>Sabado {eventInfo.date} a las {eventInfo.time}hs </h5>
+                            <h5>{dateToDay(eventInfo.date)} {eventInfo.date} a las {eventInfo.time}hs </h5>
                             <h5>Quedan {`${eventInfo.cupos_disponibles}/${eventInfo.cupos}`} cupos disponibles </h5>
                         </div>
                         {user.type !== 'institution' && (
-                            <button className='customButton' onClick={() => handlerReserve()} >Reservar mi lugar</button>
+                            <button className={`customButton ${eventInfo.cupos_disponibles === 0 && 'disabled'}`} onClick={() => handlerReserve()} >{eventInfo.cupos_disponibles > 0 ? 'Reservar mi lugar' : 'Cupos agotados'}</button>
                         )}
                     </>
                 ) : (
