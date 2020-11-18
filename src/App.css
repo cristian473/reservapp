@@ -88,6 +88,9 @@
   pointer-events:none;
 
 }
+.customButton.cancel{
+  background-color: rgb(230, 69, 69);
+}
 
 a{
   text-decoration: none;

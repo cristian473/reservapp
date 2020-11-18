@@ -18,6 +18,8 @@ const ReserveSite = (props) => {
             props.history.push('/')
         } else if (res === false) {
             Swal.fire('Error!', `intente nuevamente`, 'error')
+        } else if (res === undefined) {
+            props.history.push('/reservations')
         }
     }
 

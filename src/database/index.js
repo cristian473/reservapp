@@ -178,12 +178,13 @@ export const getEventByCode = (code) => {
 export const SubscribeEvent = async (data) => {
     let respuesta = false
     try {
-        if (data.type === 'me') {
+        if (data.type === 'me' || data.type === 'family') {
             let res = await db.collection(`users/${data.registeredFor.dni}/reservas`).where('eventInfo.code', '==', data.eventInfo.code).get()
             if (!res.empty) throw 'Ya tiene un cupo reservado para este evento'
         }
-        await db.collection(`events/${data.eventInfo.code}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') })
-        await db.collection(`users/${data.registeredFor.dni}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY') })
+        let reservaId = moment().format('YYYYMMDDHHmmss')
+        await db.collection(`events/${data.eventInfo.code}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY'), reservaId: reservaId })
+        await db.collection(`users/${data.registeredFor.dni}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY'), reservaId: reservaId })
         const res = await db.doc(`events/${data.eventInfo.code}`).get()
         let { cupos_disponibles, cupos_ocupados } = res.data()
         if (data.type === 'family') {
@@ -193,7 +194,7 @@ export const SubscribeEvent = async (data) => {
         }
         respuesta = true
     } catch (error) {
-        Swal.fire('Error!', error, 'error')
+        await Swal.fire('Error!', error, 'error')
         respuesta = undefined
     }
     return respuesta
@@ -221,4 +222,24 @@ export const getReservInfo = async (id, dni) => {
     } catch (err) {
         console.log(err);
     }
+}
+
+export const cancelReserv = async (data) => {
+    let respuesta = false
+    try {
+        let resEvent = await db.collection(`events/${data.eventInfo.code}/reservas`).where('reservaId', '==', data.reservaId).get()
+        let resUser = await db.collection(`users/${data.registeredFor.dni}/reservas`).where('reservaId', '==', data.reservaId).get()
+        let resEventId = resEvent.docs[0].id
+        let resUserId = resUser.docs[0].id
+        let resEventData = resEvent.docs[0].data()
+        const event = await db.doc(`events/${data.eventInfo.code}`).get()
+        let { cupos_disponibles, cupos_ocupados } = event.data()
+        await db.doc(`events/${data.eventInfo.code}`).update({ cupos_disponibles: parseInt(cupos_disponibles) + parseInt(resEventData.cupos_reservados), cupos_ocupados: parseInt(cupos_ocupados) - parseInt(resEventData.cupos_reservados) })
+        await db.doc(`events/${data.eventInfo.code}/reservas/${resEventId}`).delete()
+        await db.doc(`users/${data.registeredFor.dni}/reservas/${resUserId}`).delete()
+        respuesta = true
+    } catch (err) {
+        console.log(err);
+    }
+    return respuesta
 }
