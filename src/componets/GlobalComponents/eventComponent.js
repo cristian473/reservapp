@@ -15,8 +15,8 @@ const Event = (props) => {
             dispatch(getEventByCode(code))
         }
     }, [code])
-    const handlerReserve = () => {
-        props.history.push(`/event/${code}/reserve`)
+    const redirectTo = (path) => {
+        props.history.push(path)
     }
 
     const dateToDay = (date) => {
@@ -43,9 +43,12 @@ const Event = (props) => {
                             <h5>{dateToDay(eventInfo.date)} {eventInfo.date} a las {eventInfo.time}hs </h5>
                             <h5>Quedan {`${eventInfo.cupos_disponibles}/${eventInfo.cupos}`} cupos disponibles </h5>
                         </div>
-                        {user.type !== 'institution' && (
-                            <button className={`customButton ${eventInfo.cupos_disponibles === 0 && 'disabled'}`} onClick={() => handlerReserve()} >{eventInfo.cupos_disponibles > 0 ? 'Reservar mi lugar' : 'Cupos agotados'}</button>
-                        )}
+                        {user.type !== 'institution' ? (
+                            <button className={`customButton ${eventInfo.cupos_disponibles === 0 && 'disabled'}`} onClick={() => redirectTo(`/event/${code}/reserve`)} >{eventInfo.cupos_disponibles > 0 ? 'Reservar mi lugar' : 'Cupos agotados'}</button>
+                        ) : (
+                                <button className='customButton' onClick={() => redirectTo(`/event/${code}/reservas`)} > Ver reservas </button>
+                            )}
+
                     </>
                 ) : (
                         <CircularProgress />

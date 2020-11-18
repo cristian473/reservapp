@@ -1,7 +1,9 @@
 import { REGISTERED, GET_STORES, LOGGED, GET_MOVIMIENTOS } from '../constants'
 
 const initialState = {
-    user: {},
+    user: {
+        type: ''
+    },
     events: [],
     eventInfo: {},
     integrants: [],

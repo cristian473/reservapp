@@ -11,11 +11,14 @@ import MyEvents from './componets/GlobalComponents/myEvents'
 import ReserveSite from './componets/Home/reserveSite'
 import myReservations from './componets/Home/myReservations'
 import ReservInfo from './componets/Home/reservInfo'
+import ReservasInfo from './componets/InstitutionHome/reservasInfo'
 import { getUserByDNI } from './database'
 import { useSelector, useDispatch } from 'react-redux'
 function App() {
   const dispatch = useDispatch();
-  let { type } = useSelector((store) => store.user.user)
+  debugger
+  let { type } = useSelector((store) => store?.user?.user)
+  console.log(type);
   if (!type && localStorage.getItem('u_data')) {
     let userFromCache = JSON.parse(localStorage.getItem('u_data'))
     dispatch(getUserByDNI(userFromCache))
@@ -66,6 +69,7 @@ function App() {
               <Route exact path='/create_event' component={CreateEvent} />
               <Route exact path='/my_events' component={MyEvents} />
               <Route exact path='/settings' component={Settings} />
+              <Route exact path='/event/:code/reservas' component={ReservasInfo} />
             </>
           )}
         </Switch>
