@@ -11,7 +11,6 @@ const Login = (props) => {
                 <div className="buttonContainer">
                     <button onClick={() => setForm('login')} >Iniciar sesión</button>
                     <button onClick={() => setForm('register')} >Registrarse</button>
-                    <span>Olvidé mi contraseña</span>
                 </div>
             )}
             {formType === 'login' && (
