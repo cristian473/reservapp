@@ -20,7 +20,7 @@ const LoginComponent = () => {
             dispatch({ type: 'LOGGED', payload: user })
             Swal.close()
         } else if (user && !user.dni) {
-            localStorage.setItem('u_data', JSON.stringify(user))
+            localStorage.setItem('u_data', JSON.stringify(user.email))
             dispatch({ type: 'LOGGED', payload: user })
             Swal.close()
         } else {

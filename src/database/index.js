@@ -32,7 +32,7 @@ export const getEvents = async (email) => {
 
 export const getEventsToInstitution = (email) => {
     return (dispatch) => {
-        db.collection('events').where('creator_email', '==', email).get()
+        db.collection('events').where('creator_email', '==', email).orderBy('date', 'asc').get()
             .then((events) => {
                 let dataEvents = []
                 events.forEach((ev) => {
@@ -117,7 +117,7 @@ export const subscribeEventQuery = async (code, user) => {
     let event = await ref.get()
     let operation = false
     if (!event.exists) {
-        console.log('no existe');
+        Swal.fire('Error!', 'Este codigo es invalido', 'error')
     } else {
         await ref.update(`subscriptors.${user.tel}`, user)
         operation = true
@@ -149,11 +149,14 @@ export const getEventsByInstitution = (email) => {
             return snap.docs.map(el => el.data())
         }
         db.collection('events')
+            .orderBy("date", "desc")
             .where('creator_email', '==', email[0])
-            .onSnapshot((snap) => {
+            .get()
+            .then((snap) => {
                 let data = getData(snap)
                 dispatch({ type: 'GET_EVENTS', payload: data })
             })
+            .catch((err) => console.log(err))
     }
 }
 
@@ -243,3 +246,15 @@ export const cancelReserv = async (data) => {
     }
     return respuesta
 }
+
+export const getPersonsByEvent = async (code) => {
+    try {
+        const res = await db.collection(`events/${code}/reservas`).orderBy('date', "asc").get()
+        let reservas = res.docs.map(el => {
+            return { ...el.data(), id: el.id }
+        })
+        return reservas
+    } catch (err) {
+        console.log(err);
+    }
+} 

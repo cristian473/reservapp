@@ -17,7 +17,6 @@ import { useSelector, useDispatch } from 'react-redux'
 function App() {
   const dispatch = useDispatch();
   let { type } = useSelector((store) => store?.user?.user)
-  console.log(type);
   if (!type && localStorage.getItem('u_data')) {
     let userFromCache = JSON.parse(localStorage.getItem('u_data'))
     dispatch(getUserByDNI(userFromCache))

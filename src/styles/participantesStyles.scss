@@ -1,0 +1,30 @@
+.participantesContainer{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    overflow: auto;
+    padding: 15px 0; 
+    height: 99%;   
+    .reservaCard{
+        width: 80%;
+        background-color: #ffffffdc;
+        margin: 5px 0px;
+        padding: 10px 15px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.152);
+        text-align: start;
+        ul{
+            li{
+                font-size: 14px;
+                font-weight: 300;
+            }
+        }
+        h5{
+            font-size: 14px;
+            margin: 5px 0;
+            span{
+                font-weight: 300;
+            }
+        }
+    }
+}
