@@ -30,7 +30,7 @@ const LoginComponent = () => {
     return (
         <div className="FormContainer">
             <form onSubmit={handlerSubmit} >
-                <input className='customInput' required id='DNI' placeholder='DNI' name='DNI' type="DNI" onChange={handlerInput} />
+                <input className='customInput' required id='DNI' placeholder='DNI (sin puntos)' name='DNI' type="DNI" onChange={handlerInput} />
                 <input className='customInput' required id='password' placeholder='Contraseña' name='pass' type="password" onChange={handlerInput} />
                 <button type='submit' >Iniciar sesion</button>
             </form>

@@ -1,23 +1,31 @@
 import { db, auth } from '../firebase'
 import moment from 'moment'
 import Swal from 'sweetalert2'
+
 export const setEvent = async (data, institution) => {
-    let ref = await db.collection("events").orderBy("code", "desc").limit(1).get();
-    var lastCode = parseInt(ref.docs[0].id) + 1
-    let lastCodePadded = lastCode.pad(4)
-    const dataFormated = {
-        ...data,
-        time: moment(data.time).format('HH:mm'),
-        date: moment(data.date).format('DD-MM-YYYY'),
-        institutionName: institution.institutionName,
-        creator_id: institution.creator_id,
-        creator_email: institution.email,
-        cupos_disponibles: data.cupos,
-        cupos_ocupados: 0,
-        code: lastCodePadded
+    let respuesta = false
+    try {
+        let ref = await db.collection("events").orderBy("code", "desc").limit(1).get();
+        var lastCode = parseInt(ref.docs[0].id) + 1
+        let lastCodePadded = lastCode.pad(4)
+        const dataFormated = {
+            ...data,
+            time: moment(data.time).format('HH:mm'),
+            date: moment(data.date).format('DD-MM-YYYY'),
+            institutionName: institution.institutionName,
+            creator_id: institution.creator_id,
+            creator_email: institution.email,
+            cupos_disponibles: data.cupos,
+            cupos_ocupados: 0,
+            code: lastCodePadded
+        }
+        await db.collection('events').doc(lastCodePadded).set(dataFormated)
+        respuesta = true
+    } catch (error) {
+        console.log(error);
+        Swal.fire('Error', error.message, 'error')
     }
-    console.log(dataFormated);
-    await db.collection('events').doc(lastCodePadded).set(dataFormated)
+    return respuesta
 }
 
 export const getEvents = async (email) => {
@@ -81,6 +89,7 @@ export const createUser = async (data) => {
             })
             .catch((err) => {
                 if (err.code === 'auth/email-already-in-use') Swal.fire('Error', 'El usuario ya esta en uso', "error")
+                if (err.code === 'auth/weak-password') Swal.fire('Error!', 'La contraseña debe ser mayor a 6 caracteres', 'error')
                 else {
                     Swal.fire('Error', 'Por favor intente nuevamente', "error")
                 }

@@ -51,9 +51,9 @@ const RegisterComponent = ({ history }) => {
             {registerType === 'person' && (
                 <form onSubmit={personSubmit} >
                     <input className='customInput' required placeholder='Nombre y apellido' id='name' name='name' type="name" onChange={personInput} />
-                    <input className='customInput' placeholder='N° tel (opcional)' id='tel' name='tel' type="number" onChange={personInput} />
+                    <input className='customInput' placeholder='N° telefono' id='tel' name='tel' type="number" onChange={personInput} />
                     <input className='customInput' placeholder='Email (opcional)' id='email' name='email' type="email" onChange={personInput} />
-                    <input className='customInput' required placeholder='DNI' id='dni' name='dni' type="dni" onChange={personInput} />
+                    <input className='customInput' required placeholder='DNI (sin puntos)' id='dni' name='dni' type="dni" onChange={personInput} />
                     <input className='customInput' required placeholder='Contraseña' id='password' name='pass' type="password" onChange={personInput} />
                     <input className='customInput' required placeholder='Repetir contraseña' id='repeatPass' name='repeatPass' type="password" onChange={personInput} />
                     <button type='submit' >Registrarse</button>

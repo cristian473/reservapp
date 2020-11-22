@@ -84,9 +84,8 @@
 }
 
 .customButton.disabled{
-  background-color: rgb(177, 208, 255);
+  background-color:rgba(69, 161, 194, 0.275);
   pointer-events:none;
-
 }
 .customButton.cancel{
   background-color: rgb(230, 69, 69);

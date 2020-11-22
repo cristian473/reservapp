@@ -8,6 +8,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { setEvent } from '../../database'
 import moment from 'moment'
 import '../../styles/createEvent.scss'
+import Swal from 'sweetalert2';
 const initialState = {
     eventName: '',
     address: '',
@@ -53,8 +54,12 @@ const CreateEvent = (props) => {
         }
     }
 
-    const handlerSubmit = () => {
-        setEvent(dataEvent, user)
+    const handlerSubmit = async () => {
+        let res = setEvent(dataEvent, user)
+        if (res) {
+            await Swal.fire('Exito!', 'Evento creado', 'success')
+            props.history.push('/')
+        }
     }
     return (
         <Screen title={'Completá los datos:'} history={props.history}>
