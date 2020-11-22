@@ -158,8 +158,8 @@ export const getEventsByInstitution = (email) => {
             return snap.docs.map(el => el.data())
         }
         db.collection('events')
+            .where('date', '>=', moment().format('DD-MM-YYYY'))
             .orderBy("date", "asc")
-            // .where('creator_email', '==', email[0])
             .get()
             .then((snap) => {
                 let data = getData(snap)
