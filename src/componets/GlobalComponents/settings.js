@@ -20,8 +20,6 @@ const Settings = (props) => {
             await Swal.fire('Éxito!', `ahora puedes ver los eventos de ${res}`, 'success')
             props.history.go()
             props.history.push('/')
-        } else {
-            Swal.fire('Error!', `Código inválido`, 'error')
         }
     }
 

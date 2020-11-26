@@ -2,21 +2,11 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 
-
-// var admin = require('firebase-admin');
-
 // var defaultApp = admin.initializeApp({
 //     credential: admin.credential.applicationDefault(),
 //     databaseURL: 'https://mystore-eba84.firebaseio.com'
 //   });
 // var admin = require("firebase-admin");
-
-// var serviceAccount = require("path/to/serviceAccountKey.json");
-
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-//   databaseURL: ""
-// });
 
 
 var firebaseConfig = {
@@ -34,3 +24,4 @@ var firebaseConfig = {
 const fb = firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth()
 export const db = fb.firestore();
+

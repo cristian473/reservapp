@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { createInstitution, createUser } from '../../database'
 const RegisterComponent = ({ history }) => {
-    const [input, setinputs] = useState({ name: '', tel: '', dni: '', pass: '', repeatPass: '', email: '' })
+    const [input, setinputs] = useState({ name: '', tel: '', dni: '', email: '' })
     const [insInput, setIntitutionInput] = useState({ institutionName: '', address: '', pass: '', repeatPass: '', email: '' })
     const [registerType, setType] = useState('person')
 
@@ -54,8 +54,8 @@ const RegisterComponent = ({ history }) => {
                     <input className='customInput' placeholder='N° telefono' id='tel' name='tel' type="number" onChange={personInput} />
                     <input className='customInput' placeholder='Email (opcional)' id='email' name='email' type="email" onChange={personInput} />
                     <input className='customInput' required placeholder='DNI (sin puntos)' id='dni' name='dni' type="dni" onChange={personInput} />
-                    <input className='customInput' required placeholder='Contraseña' id='password' name='pass' type="password" onChange={personInput} />
-                    <input className='customInput' required placeholder='Repetir contraseña' id='repeatPass' name='repeatPass' type="password" onChange={personInput} />
+                    {/* <input className='customInput' required placeholder='Contraseña' id='password' name='pass' type="password" onChange={personInput} />
+                    <input className='customInput' required placeholder='Repetir contraseña' id='repeatPass' name='repeatPass' type="password" onChange={personInput} /> */}
                     <button type='submit' >Registrarse</button>
                 </form>
             )}

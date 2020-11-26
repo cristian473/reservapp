@@ -74,16 +74,15 @@ export const createInstitution = async (data) => {
 }
 
 export const createUser = async (data) => {
-    const { name, email, dni, pass, tel, repeatPass } = data
-    if (pass !== repeatPass) {
-        await Swal.fire('Error', 'Las contraseñas no coinciden', 'error')
+    const { name, email, dni, tel } = data
+    if (dni.length < 6) {
+        await Swal.fire('Error', 'Coloca el DNI completo por favor', 'error')
         return null
     } else {
-
         let newEmail = `${dni.replace(/\./g, '')}@reservip.com`
-        auth.createUserWithEmailAndPassword(newEmail, pass)
+        auth.createUserWithEmailAndPassword(newEmail, dni)
             .then(async () => {
-                await db.collection('users').doc(dni).set({ name, dni, tel, email, type: 'person', institution_subscribed: [] })
+                await db.collection('users').doc(dni).set({ name, dni, tel, email, type: 'person', institution_subscribed: ['comunidadcristianadontorcuato@gmail.com'] })
                 await Swal.fire('Éxito', 'usuario creado', "success")
                 window.location.reload()
             })
@@ -92,17 +91,19 @@ export const createUser = async (data) => {
                 if (err.code === 'auth/weak-password') Swal.fire('Error!', 'La contraseña debe ser mayor a 6 caracteres', 'error')
                 else {
                     Swal.fire('Error', 'Por favor intente nuevamente', "error")
+                    console.log(err);
                 }
             })
     }
 }
 
 export const authenticate = async (data) => {
-    const { DNI, pass } = data
+    let { DNI, pass } = data
     let userLoged = false
     let newEmail = DNI;
     if (!DNI.includes('@')) {
         newEmail = `${DNI.replace(/\./g, '')}@reservip.com`
+        pass = DNI
     }
     await auth.signInWithEmailAndPassword(newEmail, pass)
         .then(async () => {
@@ -136,19 +137,18 @@ export const subscribeEventQuery = async (code, user) => {
 
 export const subscribeInstitutionQuery = async (code, user) => {
     let institution = await db.collection('users').where('creator_id', '==', code.toUpperCase()).get()
-    if (institution.docs.length > 0) {
-        try {
-            institution = institution.docs[0].data()
-            let userFromFirebase = await db.collection('users').doc(user.dni).get()
-            let { institution_subscribed } = userFromFirebase.data()
-            institution_subscribed.push(institution.email)
-            await db.collection('users').doc(user.dni).update(`institution_subscribed`, institution_subscribed)
-            return institution.institutionName
-        } catch (error) {
-            console.log(error);
-        }
-    } else {
-        return false
+    try {
+        if (institution.empty) throw `El código ingresado es incorrecto`
+        institution = institution.docs[0].data()
+        let userFromFirebase = await db.collection('users').doc(user.dni).get()
+        let { institution_subscribed } = userFromFirebase.data()
+        if (institution_subscribed.includes(institution.email)) throw `Ya esta registrado a ${institution.institutionName}`
+        institution_subscribed.push(institution.email)
+        await db.collection('users').doc(user.dni).update(`institution_subscribed`, institution_subscribed)
+        return institution.institutionName
+    } catch (error) {
+        console.log(error);
+        await Swal.fire('Error!', error, 'error')
     }
 }
 
@@ -190,6 +190,7 @@ export const getEventByCode = (code) => {
 export const SubscribeEvent = async (data) => {
     let respuesta = false
     try {
+        if (data.cupos_reservados > data.eventInfo.cupos_disponibles) throw `Solo quedan ${data.eventInfo.cupos_disponibles} cupos disponibles.`
         if (data.type === 'me' || data.type === 'family') {
             let res = await db.collection(`users/${data.registeredFor.dni}/reservas`).where('eventInfo.code', '==', data.eventInfo.code).get()
             if (!res.empty) throw 'Ya tiene un cupo reservado para este evento'
