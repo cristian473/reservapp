@@ -95,7 +95,7 @@ const ReservasInfo = (props) => {
                         <CircularProgress />
                     )}
             </div>
-            {dataExcel.length > 0 && (
+            {dataExcel.length > 0 && reservas.length > 0 && (
                 <Download reservToExcel={dataExcel} day={reservas[0].eventInfo.date} />
             )}
         </Screen>
