@@ -1,6 +1,5 @@
 import React from "react";
 import ReactExport from "react-data-export";
-import moment from 'moment'
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;

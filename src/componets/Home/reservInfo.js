@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { getReservInfo, cancelReserv } from '../../database'
 import Swal from 'sweetalert2'
 import { CircularProgress } from '@material-ui/core'
-
+import moment from 'moment'
 const ReservInfo = (props) => {
     const { user } = useSelector((store) => store.user)
     const { match: { params: { id } } } = props
@@ -28,6 +28,10 @@ const ReservInfo = (props) => {
         }
     }
 
+    const formatDate = (date) => {
+        return `${date.split('-')[2]}${date.split('-')[1]}${date.split('-')[0]}`
+    }
+
     return (
         <Screen history={props.history} title={`${res ? res.eventInfo.eventName : ''}`}>
             <div style={{ height: '100%' }} className="d-flex align-items-center justify-content-around flex-column">
@@ -37,7 +41,9 @@ const ReservInfo = (props) => {
                         <h5>Fecha: {res.eventInfo.date} </h5>
                         <h5>Hora: {res.eventInfo.time} </h5>
                         <h5>Cupos reservados: {res.cupos_reservados} </h5>
-                        <button className='customButton cancel' onClick={handlerCancelresev} >Cancelar reserva</button>
+                        {formatDate(res.eventInfo.date) >= moment().format('YYYYMMDD') &&
+                            <button className='customButton cancel' onClick={handlerCancelresev} >Cancelar reserva</button>
+                        }
                     </>
                 ) : (
                         <CircularProgress />
