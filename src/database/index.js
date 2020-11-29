@@ -135,6 +135,21 @@ export const subscribeEventQuery = async (code, user) => {
     return operation;
 }
 
+// const restoreUsers = async () => {
+//     let res = await db.collection('users').get()
+//     res.forEach((snap) => {
+//         let us = snap.data()
+//         if (us.type === 'person') {
+//             let newEmail = `${us.dni.replace(/\./g, '')}@reservip.com`
+//             auth.createUserWithEmailAndPassword(newEmail, us.dni)
+//                 .then(() => console.log(us.dni, 'creado!'))
+//                 .catch('error = ', us.dni)
+//         }
+
+//     })
+// }
+// restoreUsers()
+
 export const subscribeInstitutionQuery = async (code, user) => {
     let institution = await db.collection('users').where('creator_id', '==', code.toUpperCase()).get()
     try {

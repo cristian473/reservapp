@@ -3,13 +3,53 @@ import Screen from '../GlobalComponents/screen'
 import '../../styles/participantesStyles.scss'
 import { getPersonsByEvent } from '../../database'
 import { CircularProgress } from '@material-ui/core'
+import Download from '../GlobalComponents/exportToExcel'
 const ReservasInfo = (props) => {
     const { match: { params: { code } } } = props;
     const [reservas, setReservas] = useState([])
+    const [dataExcel, setDataExcel] = useState([])
+    const exportData = (data) => {
+        let arr = []
+        data.forEach((r) => {
+            let o = {}
+            switch (r.type) {
+                case 'family':
+                    o.lastName = r.familyName
+                    o.registeredFor = r.registeredFor.name
+                    o.form = r.acceptFormCovid
+                    o.contact = r.registeredFor.tel || r.registeredFor.email || '-'
+                    r.integrants.forEach((int) => {
+                        arr.push({ ...o, name: int })
+                    })
+                    break;
+                case 'me':
+                    o.lastName = '-'
+                    o.name = r.registeredFor.name
+                    o.registeredFor = '-'
+                    o.form = r.acceptFormCovid
+                    o.contact = r.registeredFor.tel || r.registeredFor.email || '-'
+                    arr.push(o)
+                    break;
+                case 'other':
+                    o.lastName = '-'
+                    o.name = r.registeredFor.name
+                    o.registeredFor = r.registeredFor.name
+                    o.form = r.acceptFormCovid
+                    o.contact = r.registeredFor.tel || r.registeredFor.email || '-'
+                    arr.push(o)
+                    break;
+                default:
+                    break;
+            }
+        })
+        setDataExcel(arr)
+    }
+
     useEffect(() => {
         if (code) {
             (async () => {
                 let res = await getPersonsByEvent(code)
+                exportData(res)
                 setReservas(res)
             })()
         }
@@ -55,6 +95,9 @@ const ReservasInfo = (props) => {
                         <CircularProgress />
                     )}
             </div>
+            {dataExcel.length > 0 && (
+                <Download reservToExcel={dataExcel} day={reservas[0].eventInfo.date} />
+            )}
         </Screen>
     )
 }
