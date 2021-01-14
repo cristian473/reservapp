@@ -8,11 +8,11 @@ const CovidForm = ({ type, modalOpen, setModalOpen, setConfirmFormCovid }) => {
     const handlerButton = (res) => {
         Swal.fire({
             title: '¡Momento!',
-            text: `¿Afirma que ${res.toUpperCase()} tuvo sintomas de covid o tuvo un caso estrecho ${`en los ultimos 14 dias`.toUpperCase()}?`,
+            text: `¿Afirma que ${res.toUpperCase()} ${type === 'family' ? 'tuvieron' : 'tuvo'} sintomas de covid o tuvo un caso estrecho ${`en los ultimos 14 dias`.toUpperCase()}?`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Si tuve',
-            cancelButtonText: 'No tuve',
+            confirmButtonText: `Si ${type === 'family' ? 'tuvimos' : 'tuve'}`,
+            cancelButtonText: `No ${type === 'family' ? 'tuvimos' : 'tuve'}`,
         }).then(result => {
             if (result.isConfirmed) res = 'si'
             else res = 'no'
