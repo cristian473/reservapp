@@ -18,6 +18,7 @@ const ReservInfo = (props) => {
 
 
     const handlerCancelresev = async () => {
+        Swal.fire({ title: 'Cancelando reserva' })
         Swal.showLoading()
         let resQuery = await cancelReserv(res)
         if (resQuery) {

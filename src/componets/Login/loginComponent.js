@@ -13,6 +13,7 @@ const LoginComponent = () => {
 
     const handlerSubmit = async (e) => {
         e.preventDefault()
+        Swal.fire({ title: 'Iniciando sesión' })
         Swal.showLoading()
         let user = await authenticate(input)
         if (user && user.dni) {

@@ -186,10 +186,13 @@ export const getEventsByInstitution = (email) => {
 }
 
 export const getUserByDNI = (dni) => {
+    Swal.fire({ title: 'Cargando...' })
+    Swal.showLoading()
     return (dispatch) => {
         db.collection('users').doc(dni).get()
             .then((user) => {
                 dispatch({ type: 'LOGGED', payload: user.data() })
+                Swal.close()
             })
     }
 }

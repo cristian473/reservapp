@@ -11,6 +11,7 @@ const ReserveSite = (props) => {
     const [inputsStyle, setInputStyles] = useState(false)
 
     const handlerReserve = async (type, data) => {
+        Swal.fire({ title: 'Creando reserva' })
         Swal.showLoading()
         const res = await SubscribeEvent({ ...data, type: type })
         if (res === true) {
