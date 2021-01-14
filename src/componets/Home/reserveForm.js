@@ -110,6 +110,7 @@ const ReserveForm = ({ type, setInputStyles, sendReserve }) => {
             {type === 'me' && (
                 <>
                     <h5>{eventInfo.institutionName} necesita que usted lea el siguiente formulario.</h5>
+                    {meForm.acceptFormCovid && (<h6>{`Respuesta al formulario: ${meForm.acceptFormCovid.toUpperCase()} tuve sintomas o caso estrecho en los ultimos 14 días`}</h6>)}
                     <div className="buttons">
                         <button className='customButton' onClick={() => setModalOpen(true)} >Ver formulario</button>
                         <button className={`customButton ${!meForm.acceptFormCovid && 'disabled'}`} onClick={handlerConfirm}>Confirmar reserva</button>
@@ -138,6 +139,7 @@ const ReserveForm = ({ type, setInputStyles, sendReserve }) => {
                     />
                 </div>
                     <h5>{eventInfo.institutionName} necesita que el invitado lea el siguiente formulario.</h5>
+                    {otherForm.acceptFormCovid && (<h6>{`Respuesta al formulario: ${otherForm.acceptFormCovid.toUpperCase()} tuvo sintomas o caso estrecho en los ultimos 14 días`}</h6>)}
                     <div className="buttons">
                         <button className='customButton' onClick={() => setModalOpen(true)} >Ver formulario</button>
                         <button className={`customButton ${!otherForm.acceptFormCovid && 'disabled'}`} onClick={handlerConfirm}>Confirmar reserva</button>
@@ -170,6 +172,7 @@ const ReserveForm = ({ type, setInputStyles, sendReserve }) => {
                     }
                 </div>
                     <h5>{eventInfo.institutionName} necesita que ustedes lean el siguiente formulario.</h5>
+                    {familyForm.acceptFormCovid && (<h6>{`Respuesta al formulario: ${familyForm.acceptFormCovid.toUpperCase()} tuvimos sintomas o caso estrecho en los ultimos 14 días`}</h6>)}
                     <div className="buttons">
                         <button className='customButton' onClick={() => setModalOpen(true)} >Ver formulario</button>
                         <button className={`customButton ${!familyForm.acceptFormCovid && 'disabled'}`} onClick={handlerConfirm}>Confirmar reserva</button>

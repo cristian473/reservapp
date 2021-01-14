@@ -12,6 +12,7 @@ export const setEvent = async (data, institution) => {
             ...data,
             time: moment(data.time).format('HH:mm'),
             date: moment(data.date).format('DD-MM-YYYY'),
+            dt_id: moment(data.time).format('YYYYMMDD'),
             institutionName: institution.institutionName,
             creator_id: institution.creator_id,
             creator_email: institution.email,
@@ -173,8 +174,8 @@ export const getEventsByInstitution = (email) => {
             return snap.docs.map(el => el.data())
         }
         db.collection('events')
-            .where('date', '>=', moment().format('DD-MM-YYYY'))
-            .orderBy("date", "asc")
+            .where('dt_id', '>=', moment().format('YYYYMMDD'))
+            .orderBy("dt_id", "asc")
             .get()
             .then((snap) => {
                 let data = getData(snap)
@@ -282,4 +283,26 @@ export const getPersonsByEvent = async (code) => {
     } catch (err) {
         console.log(err);
     }
-} 
+}
+
+// const addidDt = async () => {
+//     try {
+//         let events = await db.collection('events').get()
+//         console.log(events);
+//         for (let i = 0; i < events.docs.length; i++) {
+//             const ev = events.docs[i];
+//             let data = ev.data();
+//             console.log(data);
+//             let id = ev.id;
+//             if (data.date) {
+//                 let dtArr = data.date.split('-');
+//                 console.log(`${dtArr[2]}${dtArr[1]}${dtArr[0]}`);
+//                 await db.doc(`events/${id}`).update('dt_id', `${dtArr[2]}${dtArr[1]}${dtArr[0]}`)
+//             }
+//         }
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
+
+// addidDt()
