@@ -12,7 +12,7 @@ export const setEvent = async (data, institution) => {
             ...data,
             time: moment(data.time).format('HH:mm'),
             date: moment(data.date).format('DD-MM-YYYY'),
-            dt_id: moment(data.time).format('YYYYMMDD'),
+            dt_id: moment(data.date).format('YYYYMMDD'),
             institutionName: institution.institutionName,
             creator_id: institution.creator_id,
             creator_email: institution.email,
