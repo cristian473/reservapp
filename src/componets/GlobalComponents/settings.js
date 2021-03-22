@@ -28,7 +28,7 @@ const Settings = (props) => {
             <div className='d-flex flex-column justify-content-around aling-items-center align-items-center' style={{ height: '100%' }}>
                 {user.type === 'person' && (
                     <div className="inputCode">
-                        <h5>Codigo de institución o evento:</h5>
+                        <h5>Código de institución:</h5>
                         <input type="text" placeholder='Ingresar código' className='customInput' value={code} onChange={(e) => setcode(e.target.value)} />
                         {code.length > 0 && <button onClick={subscribeEvent} className='customButton'>Confirmar</button>}
                     </div>

@@ -15,6 +15,9 @@ const Home = (props) => {
     useEffect(() => {
         if (user.institution_subscribed && user.institution_subscribed.length > 0) {
             dispatch(getEventsByInstitution(user.institution_subscribed))
+        } else {
+            Swal.fire('Momento!', 'Usted no está vinculado a ninguna institución aún, por favor ingrese el cod. para comenzar a ver sus eventos', 'warning')
+            .then(() => props.history.push('/settings'))
         }
     }, [user])
     const redirectTo = (path) => {

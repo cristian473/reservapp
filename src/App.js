@@ -14,6 +14,8 @@ import ReservInfo from './componets/Home/reservInfo'
 import ReservasInfo from './componets/InstitutionHome/reservasInfo'
 import { getUserByDNI } from './database'
 import { useSelector, useDispatch } from 'react-redux'
+import FaceRecognition from './componets/faceRecognition'
+
 function App() {
   const dispatch = useDispatch();
   let type = useSelector((store) => store?.user?.user?.type)

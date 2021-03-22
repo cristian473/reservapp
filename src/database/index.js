@@ -54,14 +54,19 @@ export const getEventsToInstitution = (email) => {
 }
 
 export const createInstitution = async (data) => {
-    const { institutionName, email, pass, address, repeatPass } = data
+    const { institutionName, email, pass, address, repeatPass, creator_id } = data
+    const idCreated = await db.collection('users').where('creator_id', '==', creator_id.toUpperCase()).get()
+    if(!creator_id || idCreated.docs.length > 0){
+        Swal.fire('Error', 'El codigo de identificación elegido ya existe', 'error')
+        return null
+    } 
     if (pass !== repeatPass) {
         await Swal.fire('Error', 'Las contraseñas no coinciden', 'error')
         return null
-    } else {
+    } else {        
         auth.createUserWithEmailAndPassword(email, pass)
             .then(async () => {
-                await db.collection('users').doc(email).set({ institutionName, address, email, type: 'institution' })
+                await db.collection('users').doc(email).set({ institutionName, address, email, type: 'institution', creator_id: creator_id.toUpperCase() })
                 await Swal.fire('Éxito', 'usuario creado', "success")
                 window.location.reload()
             })
@@ -83,7 +88,7 @@ export const createUser = async (data) => {
         let newEmail = `${dni.replace(/\./g, '')}@reservip.com`
         auth.createUserWithEmailAndPassword(newEmail, dni)
             .then(async () => {
-                await db.collection('users').doc(dni).set({ name, dni, tel, email, type: 'person', institution_subscribed: ['comunidadcristianadontorcuato@gmail.com'] })
+                await db.collection('users').doc(dni).set({ name, dni, tel, email, type: 'person',institution_subscribed: []})
                 await Swal.fire('Éxito', 'usuario creado', "success")
                 window.location.reload()
             })
@@ -154,7 +159,7 @@ export const subscribeEventQuery = async (code, user) => {
 export const subscribeInstitutionQuery = async (code, user) => {
     let institution = await db.collection('users').where('creator_id', '==', code.toUpperCase()).get()
     try {
-        if (institution.empty) throw `El código ingresado es incorrecto`
+        if (institution.empty) throw `No hay ninguna institución asocialda a este código`
         institution = institution.docs[0].data()
         let userFromFirebase = await db.collection('users').doc(user.dni).get()
         let { institution_subscribed } = userFromFirebase.data()
@@ -174,6 +179,7 @@ export const getEventsByInstitution = (email) => {
             return snap.docs.map(el => el.data())
         }
         db.collection('events')
+            .where('creator_email', '==', email[0])
             .where('dt_id', '>=', moment().format('YYYYMMDD'))
             .orderBy("dt_id", "asc")
             .get()
