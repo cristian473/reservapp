@@ -284,11 +284,14 @@ export const cancelReserv = async (data) => {
         let resEventData = resEvent.docs[0].data()
         const event = await db.doc(`events/${data.eventInfo.code}`).get()
         let { cupos_disponibles, cupos_ocupados } = event.data()
-        await db.doc(`events/${data.eventInfo.code}`).update({ cupos_disponibles: parseInt(cupos_disponibles) + parseInt(resEventData.cupos_reservados), cupos_ocupados: parseInt(cupos_ocupados) - parseInt(resEventData.cupos_reservados) })
+        let dataToUpdate = { cupos_disponibles: parseInt(cupos_disponibles) + parseInt(resEventData.cupos_reservados), cupos_ocupados: parseInt(cupos_ocupados) - parseInt(resEventData.cupos_reservados) }
+        if(!dataToUpdate.cupos_disponibles || !dataToUpdate.cupos_ocupados) throw 'Por favor intente nuevamente'
+        await db.doc(`events/${data.eventInfo.code}`).update(dataToUpdate)
         await db.doc(`events/${data.eventInfo.code}/reservas/${resEventId}`).delete()
         await db.doc(`users/${data.registeredFor.dni}/reservas/${resUserId}`).delete()
         respuesta = true
     } catch (err) {
+        await Swal.fire('Error!', err, 'error')
         console.log(err);
     }
     return respuesta
