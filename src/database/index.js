@@ -223,13 +223,13 @@ export const SubscribeEvent = async (data) => {
             if (!res.empty) throw 'Ya tiene un cupo reservado para este evento'
         }
         let reservaId = moment().format('YYYYMMDDHHmmss')
-        await db.collection(`events/${data.eventInfo.code}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY'), reservaId: reservaId })
-        await db.collection(`users/${data.registeredFor.dni}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY'), reservaId: reservaId })
         const res = await db.doc(`events/${data.eventInfo.code}`).get()
         let { cupos_disponibles, cupos_ocupados } = res.data()
         if (typeof cupos_disponibles === 'string') cupos_disponibles = parseInt(cupos_disponibles)
         if (typeof cupos_ocupados === 'string') cupos_ocupados = parseInt(cupos_ocupados)
         if(!cupos_disponibles || !cupos_ocupados) throw 'Por favor intente nuevamente'
+        await db.collection(`events/${data.eventInfo.code}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY'), reservaId: reservaId })
+        await db.collection(`users/${data.registeredFor.dni}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY'), reservaId: reservaId })
         if (data.type === 'family') {
             await db.doc(`events/${data.eventInfo.code}`).update({ cupos_disponibles: cupos_disponibles - data.integrants.length, cupos_ocupados: cupos_ocupados + data.integrants.length })
         } else {
