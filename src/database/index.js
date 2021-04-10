@@ -231,9 +231,13 @@ export const SubscribeEvent = async (data) => {
         await db.collection(`events/${data.eventInfo.code}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY'), reservaId: reservaId })
         await db.collection(`users/${data.registeredFor.dni}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY'), reservaId: reservaId })
         if (data.type === 'family') {
-            await db.doc(`events/${data.eventInfo.code}`).update({ cupos_disponibles: cupos_disponibles - data.integrants.length, cupos_ocupados: cupos_ocupados + data.integrants.length })
+            let dataToUpdate = { cupos_disponibles: cupos_disponibles - data.integrants.length, cupos_ocupados: cupos_ocupados + data.integrants.length }
+            if(!dataToUpdate.cupos_disponibles || !dataToUpdate.cupos_ocupados) throw 'Por favor intente nuevamente'
+            await db.doc(`events/${data.eventInfo.code}`).update(dataToUpdate)
         } else {
-            await db.doc(`events/${data.eventInfo.code}`).update({ cupos_disponibles: cupos_disponibles - 1, cupos_ocupados: cupos_ocupados + 1 })
+            let dataToUpdate = { cupos_disponibles: cupos_disponibles - 1, cupos_ocupados: cupos_ocupados + 1 }
+            if(!dataToUpdate.cupos_disponibles || !dataToUpdate.cupos_ocupados) throw 'Por favor intente nuevamente'
+            await db.doc(`events/${data.eventInfo.code}`).update(dataToUpdate)
         }
         respuesta = true
     } catch (error) {

@@ -97,6 +97,7 @@ const ReserveForm = ({ type, setInputStyles, sendReserve }) => {
             sendReserve(type, data)
         }
         if (type === 'family') {
+            if(!familyForm.integrants_number) return Swal.fire('','Debe indicar la cantidad de integrantes', 'error')
             data = { ...familyForm, eventInfo: eventInfo, registeredFor: user }
             sendReserve(type, data)
         }
