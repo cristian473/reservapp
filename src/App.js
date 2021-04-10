@@ -14,7 +14,7 @@ import ReservInfo from './componets/Home/reservInfo'
 import ReservasInfo from './componets/InstitutionHome/reservasInfo'
 import { getUserByDNI } from './database'
 import { useSelector, useDispatch } from 'react-redux'
-import FaceRecognition from './componets/faceRecognition'
+// import FaceRecognition from './componets/faceRecognition'
 
 function App() {
   const dispatch = useDispatch();
@@ -55,7 +55,7 @@ function App() {
               <Route exact path='/settings' component={Settings} />
               <Route exact path='/reservations' component={myReservations} />
               <Route exact path='/reservation/:id' component={ReservInfo} />
-
+              {/* <Route exact path='/faceRecognition' component={FaceRecognition} />         */}
             </>
           )}
           {type === 'institution' && (
