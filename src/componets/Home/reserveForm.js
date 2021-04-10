@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import CovidForm from './covidForm'
 import Screen from '../GlobalComponents/screen'
 import { useEffect } from 'react'
+import Swal from 'sweetalert2'
 
 const ReserveForm = ({ type, setInputStyles, sendReserve }) => {
     const dispatch = useDispatch();
@@ -101,6 +102,7 @@ const ReserveForm = ({ type, setInputStyles, sendReserve }) => {
         }
         if (type === 'other') {
             data = { ...otherForm, eventInfo: eventInfo, registeredFor: user }
+            if(data.personName === '' || data.personName.split(' ').length <= 1) return Swal.fire('','Debe agregar nombre y apellido del invitado', 'error')
             sendReserve(type, data)
         }
 

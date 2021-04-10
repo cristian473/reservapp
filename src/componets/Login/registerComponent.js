@@ -27,7 +27,6 @@ const RegisterComponent = ({ history }) => {
     const institutionSubmit = async (e) => {
         e.preventDefault()
         let res = await createInstitution(insInput);
-        console.log(res);
         if (res) {
             history.go()
         } else {

@@ -7,7 +7,6 @@ import { getEventsToInstitution, getEventsByInstitution } from '../../database'
 const MyEvents = (props) => {
     const dispatch = useDispatch()
     const { events, user } = useSelector((store) => store.user)
-    console.log(user);
     useEffect(() => {
         if (user.type === 'institution') {
             dispatch(getEventsToInstitution(user.email))

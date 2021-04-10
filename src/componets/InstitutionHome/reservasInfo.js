@@ -23,16 +23,16 @@ const ReservasInfo = (props) => {
                     })
                     break;
                 case 'me':
-                    o.lastName = '-'
-                    o.name = r.registeredFor.name
+                    o.lastName = r.registeredFor.name.split(' ')[1] || '-'
+                    o.name = r.registeredFor.name.split(' ')[0] || '-'
                     o.registeredFor = '-'
                     o.form = r.acceptFormCovid
                     o.contact = r.registeredFor.tel || r.registeredFor.email || '-'
                     arr.push(o)
                     break;
                 case 'other':
-                    o.lastName = '-'
-                    o.name = r.registeredFor.name
+                    o.lastName = r.personName.split(' ')[1] || '-'
+                    o.name = r.personName.split(' ')[0] || '-'
                     o.registeredFor = r.registeredFor.name
                     o.form = r.acceptFormCovid
                     o.contact = r.registeredFor.tel || r.registeredFor.email || '-'
@@ -42,6 +42,7 @@ const ReservasInfo = (props) => {
                     break;
             }
         })
+        arr.sort(((a, b) => a.lastName.localeCompare(b.lastName)))
         setDataExcel(arr)
     }
 
@@ -96,7 +97,7 @@ const ReservasInfo = (props) => {
                     )}
             </div>
             {dataExcel.length > 0 && reservas.length > 0 && (
-                <Download reservToExcel={dataExcel} day={reservas[0].eventInfo.date} />
+                <Download reservToExcel={dataExcel} day={reservas[0].eventInfo.date} /> 
             )}
         </Screen>
     )

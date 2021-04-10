@@ -24,8 +24,6 @@ const LoginComponent = () => {
             localStorage.setItem('u_data', JSON.stringify(user.email))
             dispatch({ type: 'LOGGED', payload: user })
             Swal.close()
-        } else {
-            console.log(user);
         }
     }
     return (

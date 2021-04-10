@@ -30,7 +30,6 @@ function App() {
     return s;
   }
 
-
   return (
     <div className="App">
       <BrowserRouter>

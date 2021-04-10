@@ -41,15 +41,17 @@ export const getEvents = async (email) => {
 
 export const getEventsToInstitution = (email) => {
     return (dispatch) => {
-        db.collection('events').where('creator_email', '==', email).orderBy('date', 'asc').get()
-            .then((events) => {
+        db.collection('events')
+        .where('creator_email', '==', email)
+        .orderBy("dt_id", "desc")
+        .get().then((events) => {
                 let dataEvents = []
                 events.forEach((ev) => {
                     const data = ev.data()
                     dataEvents.push(data)
                 })
                 dispatch({ type: 'GET_EVENTS', payload: dataEvents })
-            })
+            }).catch((error) => console.error(error))
     }
 }
 
@@ -244,7 +246,6 @@ export const getReservesToUser = async (dni) => {
         let reservas = res.docs.map(el => {
             return { ...el.data(), id: el.id }
         })
-        console.log(reservas);
         return reservas
     } catch (error) {
         Swal.fire('Error!', 'Por favor intente nuevamente', 'error')
