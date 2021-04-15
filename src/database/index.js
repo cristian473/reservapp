@@ -227,7 +227,7 @@ export const SubscribeEvent = async (data) => {
         let { cupos_disponibles, cupos_ocupados } = res.data()
         if (typeof cupos_disponibles === 'string') cupos_disponibles = parseInt(cupos_disponibles)
         if (typeof cupos_ocupados === 'string') cupos_ocupados = parseInt(cupos_ocupados)
-        if(!cupos_disponibles || !cupos_ocupados) throw 'Por favor intente nuevamente'
+        if((cupos_disponibles !== 0 && !cupos_disponibles) || (cupos_ocupados !== 0 && !cupos_ocupados)) throw 'Por favor intente nuevamente'
         await db.collection(`events/${data.eventInfo.code}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY'), reservaId: reservaId })
         await db.collection(`users/${data.registeredFor.dni}/reservas`).doc().set({ ...data, time: moment().format('HH:mm'), date: moment().format('DD-MM-YYYY'), reservaId: reservaId })
         if (data.type === 'family') {
@@ -285,7 +285,10 @@ export const cancelReserv = async (data) => {
         const event = await db.doc(`events/${data.eventInfo.code}`).get()
         let { cupos_disponibles, cupos_ocupados } = event.data()
         let dataToUpdate = { cupos_disponibles: parseInt(cupos_disponibles) + parseInt(resEventData.cupos_reservados), cupos_ocupados: parseInt(cupos_ocupados) - parseInt(resEventData.cupos_reservados) }
-        if(!dataToUpdate.cupos_disponibles || !dataToUpdate.cupos_ocupados) throw 'Por favor intente nuevamente'
+        if(
+            (dataToUpdate.cupos_disponibles !== 0 && !dataToUpdate.cupos_disponibles) || 
+            (dataToUpdate.cupos_ocupados !== 0 && !dataToUpdate.cupos_ocupados)
+            ) throw 'Por favor intente nuevamente'
         await db.doc(`events/${data.eventInfo.code}`).update(dataToUpdate)
         await db.doc(`events/${data.eventInfo.code}/reservas/${resEventId}`).delete()
         await db.doc(`users/${data.registeredFor.dni}/reservas/${resUserId}`).delete()
