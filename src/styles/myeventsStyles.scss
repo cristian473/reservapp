@@ -12,4 +12,15 @@
         width: 0px;
         visibility: hidden;
     }
+    .noEvents{
+        display: flex;
+        align-items: center;
+        height: 100%;
+        flex-direction: column;
+        justify-content: space-evenly;
+        svg{
+            font-size: 100px;
+            color: rgb(149, 157, 163);
+        }
+    }
 }
