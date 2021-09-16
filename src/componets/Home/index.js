@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDay, faBookmark, faCog } from '@fortawesome/free-solid-svg-icons'
-import EventCard from '../GlobalComponents/eventCard'
 import '../../styles/homeStyles.scss'
 import '../../styles/institutionStyles.scss'
-import { getEvents, subscribeEventQuery, getEventsByInstitution, subscribeInstitutionQuery } from '../../database'
+import { checkForm, getEventsByInstitution } from '../../database'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
+
 const Home = (props) => {
     const dispatch = useDispatch()
     const [code, setcode] = useState('')
-    const { user, events } = useSelector((store) => store.user)
+    const { user } = useSelector((store) => store.user)
+
     useEffect(() => {
         if (user.institution_subscribed && user.institution_subscribed.length > 0) {
             dispatch(getEventsByInstitution(user.institution_subscribed))
@@ -19,7 +19,15 @@ const Home = (props) => {
             Swal.fire('Momento!', 'Usted no está vinculado a ninguna institución aún, por favor ingrese el cod. para comenzar a ver sus eventos', 'warning')
             .then(() => props.history.push('/settings'))
         }
+        //checkea si no hizo el formulario
+        if(user.institution_subscribed.includes("comunidadcristianadontorcuato@gmail.com") && ['41464156', '33021649'].includes(user.dni)){
+            checkForm('comunidadcristianadontorcuato@gmail.com', user.dni)
+            .then((goForm) => {
+                if(goForm) redirectTo(`/form?step=0`)
+            })
+        }
     }, [user])
+
     const redirectTo = (path) => {
         props.history.push(path)
     }

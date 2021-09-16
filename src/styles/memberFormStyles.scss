@@ -1,0 +1,40 @@
+.firstStepContainer{
+    padding: 7px;
+}
+.secondStepContainer{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    label{
+        margin-top: 5px;
+    }
+    input{
+        border: none;
+        border-bottom: 1px solid rgb(199, 199, 199);
+        border-radius: 5px;
+        width: auto;
+        text-align: center;
+    }
+    select{
+        border: none;
+        background-color: white;
+        border-bottom: 1px solid rgb(199, 199, 199);
+        border-radius: 5px;
+        text-align-last:center;
+    }
+    h5{
+        margin-top: 20px;
+    }
+    .row{
+        display: flex;
+        justify-content: center;
+        margin: 0 15px;
+        align-items: center;
+        label{
+            margin-right: 5px;
+        }
+        &.underlined{
+            border-bottom: 1px solid rgb(199, 199, 199);
+        }
+    }
+}

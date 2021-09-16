@@ -1,4 +1,4 @@
-import { REGISTERED, GET_STORES, LOGGED, GET_MOVIMIENTOS } from '../constants'
+import { LOGGED, SET_MEMBER_FORM_DATA } from '../constants'
 
 const initialState = {
     user: {
@@ -40,14 +40,6 @@ export function useReducer(state = initialState, { type, payload }) {
                 ...state,
                 integrants: payload
             }
-        case 'SET_RESERVES':
-            return {
-                ...state,
-                myReserves: payload
-            }
     }
-
-
-
     return state;
 }

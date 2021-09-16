@@ -1,6 +1,7 @@
 import { db, auth } from '../firebase'
 import moment from 'moment'
 import Swal from 'sweetalert2'
+import { useHistory } from 'react-router'
 
 export const setEvent = async (data, institution) => {
     let respuesta = false
@@ -90,7 +91,7 @@ export const createUser = async (data) => {
         let newEmail = `${dni.replace(/\./g, '')}@reservip.com`
         auth.createUserWithEmailAndPassword(newEmail, dni)
             .then(async () => {
-                await db.collection('users').doc(dni).set({ name, dni, tel, email, type: 'person',institution_subscribed: []})
+                await db.collection('users').doc(dni).set({ name, dni, tel, email, type: 'person',institution_subscribed: ['comunidadcristianadontorcuato@gmail.com']})
                 await Swal.fire('Éxito', 'usuario creado', "success")
                 window.location.reload()
             })
@@ -311,6 +312,46 @@ export const getPersonsByEvent = async (code) => {
         console.log(err);
     }
 }
+
+export const checkForm = async (institution, dni) => {
+    try {
+        const institutionData = (await db.doc(`users/${institution}`).get()).data()
+        if(!institutionData.hasForm) return;
+        
+        const forms = await db.collection(`users/${institution}/forms`)
+        .where('integrants_dni', 'array-contains', dni).get()
+
+        if(forms.empty){
+            return Swal.fire({
+                title: 'Espera gil!', 
+                text: `${institutionData.institutionName} necesita que complete un formulario de membresia. ¿Desea completarlo?`,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Completar',
+                cancelButtonText: 'Más tarde',
+                reverseButtons: true
+            })          
+        } else {
+            await db.doc(`users/${dni}`).update({institutionForm: {completed: true, date: moment().format('YYYY-MM-DD')}})
+            return false
+        }
+    } catch (err) {
+        Swal.fire('ocurrio un error')
+    }
+}
+
+export const getMemberFormdata = async (dni, institutionId) => {
+        return (await db.doc(`users/${institutionId}/membersForms/${dni}`).get()).data()
+}
+
+export const saveSecondStepMemberForm = async (dni, institutionId, formData) => {
+    try {
+        await db.doc(`users/${institutionId}/membersForms/${dni}`).set({personalData: formData})
+    } catch (err) {
+        Swal.fire('Ocurrio un error al guardar los datos')
+    }
+}
+
 
 // const addidDt = async () => {
 //     try {
