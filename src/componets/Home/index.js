@@ -20,10 +20,12 @@ const Home = (props) => {
             .then(() => props.history.push('/settings'))
         }
         //checkea si no hizo el formulario
+        if(user.memberFormCompleted) return;
+
         if(user.institution_subscribed.includes("comunidadcristianadontorcuato@gmail.com") && ['41464156', '33021649'].includes(user.dni)){
             checkForm('comunidadcristianadontorcuato@gmail.com', user.dni)
-            .then((goForm) => {
-                if(goForm) redirectTo(`/form?step=0`)
+            .then((response) => {
+                if(response.isConfirmed) redirectTo(`/form?step=1`)            
             })
         }
     }, [user])

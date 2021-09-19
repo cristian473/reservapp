@@ -6,7 +6,7 @@ const FirstStep = () => {
     const history = useHistory()
 
     const handleNextStep = () => {
-        history.push(`/form?step=1`)
+        history.push(`/form?step=2`)
     }
 
     return (

@@ -7,7 +7,9 @@ const initialState = {
     events: [],
     eventInfo: {},
     integrants: [],
-    myReserves: []
+    myReserves: [],
+    memberFormData: null,
+    memberFormCompleted: false
 }
 
 export function useReducer(state = initialState, { type, payload }) {
@@ -39,6 +41,16 @@ export function useReducer(state = initialState, { type, payload }) {
             return {
                 ...state,
                 integrants: payload
+            }
+        case 'SET_FORM_COMPLETED':
+            return {
+                ...state,
+                memberFormCompleted: true
+            }
+        case 'SET_MEMBERFORM_DATA':
+            return {
+                ...state,
+                memberFormData: payload
             }
     }
     return state;

@@ -346,12 +346,33 @@ export const getMemberFormdata = async (dni, institutionId) => {
 
 export const saveSecondStepMemberForm = async (dni, institutionId, formData) => {
     try {
-        await db.doc(`users/${institutionId}/membersForms/${dni}`).set({personalData: formData})
+        const path = `users/${institutionId}/membersForms/${dni}`
+        if((await db.doc(path).get()).exists){
+            await db.doc(path).update({personalData: formData})
+        } else {
+            await db.doc(path).set({personalData: formData})
+        }
     } catch (err) {
         Swal.fire('Ocurrio un error al guardar los datos')
     }
 }
 
+export const saveThirdStep = async (dni, institutionId, {integrantsData, integrantsDni}) => {
+    try {
+        await db.doc(`users/${institutionId}/membersForms/${dni}`).update({integrantsData, integrantsDni})
+    } catch (err) {
+        Swal.fire('Ocurrio un error al guardar los datos')
+    }
+}
+
+export const saveFourthStep = async (dni, institutionId, {convertionData, baptismData, signature}) => {
+    try {
+        await db.doc(`users/${institutionId}/membersForms/${dni}`).update({convertionData, baptismData, signature})
+        await db.doc(`users/${dni}`).update({memberFormCompleted: true})
+    } catch (err) {
+        Swal.fire('Ocurrio un error al guardar los datos')
+    }
+}
 
 // const addidDt = async () => {
 //     try {

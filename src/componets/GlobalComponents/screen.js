@@ -9,7 +9,7 @@ const Screen = ({ title, children, history, arrowBack = true, extendBody }) => {
     return (
         <div className="screen">
             {arrowBack && (
-                <div className="backArrow" onClick={() => history?.goBack() || HistoryHook.goBack()} >
+                <div className="backArrow" onClick={() => HistoryHook.goBack()} >
                     <FontAwesomeIcon icon={faArrowLeft} />
                 </div>
             )}

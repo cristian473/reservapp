@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { getMemberFormdata, saveSecondStepMemberForm } from "../../../database";
 import Screen from "../../GlobalComponents/screen";
+import {useHistory} from 'react-router-dom'
 
 const personalFormInitialState = {
     name: '',
@@ -29,6 +30,8 @@ const personalFormInitialState = {
 const SecondStep = () => {    
     const {user} = useSelector((state) => state.user)
     const [personalDataForm, setPersonalDataForm] = useState({...personalFormInitialState, name: user.name, dni: user.dni, email: user.email, tel: user.tel})
+    const history = useHistory()
+    const dispatch = useDispatch()
 
     const handleInputChange = ({target:{name, value}}) => {
         setPersonalDataForm({...personalDataForm, [name]: value})
@@ -39,20 +42,27 @@ const SecondStep = () => {
     );
     const handleSubmit = (e) => {
         e.preventDefault();
+        Swal.fire('Guardando...')
+        Swal.showLoading()
         saveSecondStepMemberForm(user.dni, user.institution_subscribed[0], personalDataForm)
         .then(() => {
+            Swal.hideLoading()
             Swal.fire('Guardado correctamente')
+            history.push('/form?step=3')
         })
     }
 
     useEffect(() => {
         getMemberFormdata(user.dni, user.institution_subscribed[0])
         .then((res) => {
+            dispatch({type: 'SET_MEMBERFORM_DATA', payload: res})
             if(res.personalData){
                 setPersonalDataForm(res.personalData)
             }
         })
     }, [])
+
+    const StudiesHelper = ['Ninguno','Primario','Secundario incompleto','Secundario','Universitario']
 
     return (
         <Screen extendBody title='Información personal'>
@@ -107,22 +117,12 @@ const SecondStep = () => {
                 <label>Profesión:</label>
                 <input required autoComplete='off' name='profesion' value={personalDataForm.profesion} onChange={handleInputChange}/>
                 <label>Estudios cursados:</label>
+                {StudiesHelper.map((studie) => (
                     <div className="row underlined">
-                        <label htmlFor='Ninguno'>Ninguno</label>
-                        <input id='Ninguno' type='radio' name='estudiosCursados' value='Ninguno' checked={personalDataForm.estudiosCursados === 'Ninguno'} onChange={handleInputChange}/>
+                        <label htmlFor={studie}>{studie}</label>
+                        <input id={studie} type='radio' name='estudiosCursados' value={studie} checked={personalDataForm.estudiosCursados === studie} onChange={handleInputChange}/>
                     </div>
-                    <div className="row underlined">
-                        <label htmlFor='Primario'>Primario</label>
-                        <input id='Primario' type='radio' name='estudiosCursados' value='Primario' checked={personalDataForm.estudiosCursados === 'Primario'} onChange={handleInputChange}/>
-                    </div>
-                    <div className="row underlined">
-                        <label htmlFor='Secundario'>Secundario</label>
-                        <input id='Secundario' type='radio' name='estudiosCursados' value='Secundario' checked={personalDataForm.estudiosCursados === 'Secundario'} onChange={handleInputChange}/>
-                    </div>
-                    <div className="row underlined">
-                        <label htmlFor='Universitario'>Universitario</label>
-                        <input id='Universitario' type='radio' name='estudiosCursados' value='Universitario' checked={personalDataForm.estudiosCursados === 'Universitario'} onChange={handleInputChange}/>
-                    </div>
+                ))}                   
                 <label>Otros estudios cursados:</label>
                 <input autoComplete='off' name='otrosEstudiosCursados' value={personalDataForm.otrosEstudiosCursados} onChange={handleInputChange}/>
                 <div className="buttonsContainer">
