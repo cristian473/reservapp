@@ -22,7 +22,7 @@ const Home = (props) => {
         //checkea si no hizo el formulario
         if(user.memberFormCompleted) return;
 
-        if(user.institution_subscribed.includes("comunidadcristianadontorcuato@gmail.com") && ['41464156', '33021649'].includes(user.dni)){
+        if(user.institution_subscribed.includes("comunidadcristianadontorcuato@gmail.com")){
             checkForm('comunidadcristianadontorcuato@gmail.com', user.dni)
             .then((response) => {
                 if(response.isConfirmed) redirectTo(`/form?step=1`)            
