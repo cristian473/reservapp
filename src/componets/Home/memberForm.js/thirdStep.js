@@ -48,6 +48,7 @@ const ThirdStep = () => {
                 title: 'Parentesco: ',
                 input: 'select',
                 inputOptions: {
+                    'Esposo/a': 'Esposo/a',
                     'Madre': 'Madre',
                     'Padre': 'Padre',
                     'Hijo/a': 'Hijo/a',
