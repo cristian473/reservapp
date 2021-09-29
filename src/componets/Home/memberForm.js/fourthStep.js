@@ -18,7 +18,7 @@ const formInitialState = {
 }
 
 const optionsParameter = {
-    width: 250,
+    width: 270,
     height: 40,
     paddingY: 25,
     paddingX: 10,
@@ -96,7 +96,7 @@ const FourthStep = () => {
         setTimeout(() => {
             Swal.hideLoading()
             Swal.close()
-        }, 3000)
+        }, 4000)
     }
 
     const handleSumbit = (e) => {
