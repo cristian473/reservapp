@@ -323,7 +323,7 @@ export const checkForm = async (institution, dni) => {
 
         if(forms.empty){
             return Swal.fire({
-                title: 'Espera gil!', 
+                title: 'Espera!', 
                 text: `${institutionData.institutionName} necesita que complete un formulario de membresia. ¿Desea completarlo?`,
                 icon: 'info',
                 showCancelButton: true,
