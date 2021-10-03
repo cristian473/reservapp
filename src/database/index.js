@@ -318,9 +318,9 @@ export const checkForm = async (institution, dni) => {
         const institutionData = (await db.doc(`users/${institution}`).get()).data()
         if(!institutionData.hasForm) return;
         
-        const forms = await db.collection(`users/${institution}/forms`)
-        .where('integrants_dni', 'array-contains', dni).get()
-
+        const forms = await db.collection(`users/${institution}/membersForms`)
+        .where('integrantsDni', 'array-contains', dni).get()
+        
         if(forms.empty){
             return Swal.fire({
                 title: 'Espera!', 
@@ -332,7 +332,8 @@ export const checkForm = async (institution, dni) => {
                 reverseButtons: true
             })          
         } else {
-            await db.doc(`users/${dni}`).update({institutionForm: {completed: true, date: moment().format('YYYY-MM-DD')}})
+            await db.doc(`users/${dni}`).update({memberFormCompleted: true})
+            await Swal.fire('', 'Alguien de tu familia ya completo el formulario de membresia', 'info')
             return false
         }
     } catch (err) {
@@ -367,7 +368,7 @@ export const saveThirdStep = async (dni, institutionId, {integrantsData, integra
 
 export const saveFourthStep = async (dni, institutionId, {convertionData, baptismData, signature}) => {
     try {
-        await db.doc(`users/${institutionId}/membersForms/${dni}`).update({convertionData, baptismData, signature})
+        await db.doc(`users/${institutionId}/membersForms/${dni}`).update({convertionData, baptismData, signature, dt_complete: moment().format('YYYY-MM-DD')})
         await db.doc(`users/${dni}`).update({memberFormCompleted: true})
     } catch (err) {
         Swal.fire('Ocurrio un error al guardar los datos')
