@@ -27,11 +27,14 @@ const Settings = (props) => {
         <Screen history={props.history} title='Configuraciones'>
             <div className='d-flex flex-column justify-content-around aling-items-center align-items-center' style={{ height: '100%' }}>
                 {user.type === 'person' && (
-                    <div className="inputCode">
-                        <h5>Código de institución:</h5>
-                        <input type="text" placeholder='Ingresar código' className='customInput' value={code} onChange={(e) => setcode(e.target.value)} />
-                        {code.length > 0 && <button onClick={subscribeEvent} className='customButton'>Confirmar</button>}
-                    </div>
+                    <>
+                        <div className="inputCode">
+                            <h5>Código de institución:</h5>
+                            <input type="text" placeholder='Ingresar código' className='customInput' value={code} onChange={(e) => setcode(e.target.value)} />
+                            {code.length > 0 && <button onClick={subscribeEvent} className='customButton'>Confirmar</button>}
+                        </div>
+                        <button className='customButton' onClick={() => props.history.push(`/form?step=1`)} >Formulario de miembro</button>
+                    </>
                 )}
                 <button
                     className='customButton'

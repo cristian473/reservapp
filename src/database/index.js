@@ -194,6 +194,15 @@ export const getEventsByInstitution = (email) => {
     }
 }
 
+export const getFormsByInstitution = async (institution) => {
+    try {
+        return (await db.collection(`users/${institution}/membersForms`).get()).docs.map((doc) => ({...doc.data(), doc_id: doc.id}))
+    } catch (err) {
+        Swal.fire('', 'Error al cargar la lista', 'error')
+        console.log(err)
+    }
+}
+
 export const getUserByDNI = (dni) => {
     Swal.fire({ title: 'Cargando...' })
     Swal.showLoading()
@@ -316,13 +325,17 @@ export const getPersonsByEvent = async (code) => {
 export const checkForm = async (institution, dni) => {
     try {
         const institutionData = (await db.doc(`users/${institution}`).get()).data()
-        if(!institutionData.hasForm) return;
+        if(!institutionData.hasForm) return false;
+
+        const userData = (await db.doc(`users/${dni}`).get()).data()
+        if(userData.memberFormCompleted) return false;
+
         
         const forms = await db.collection(`users/${institution}/membersForms`)
         .where('integrantsDni', 'array-contains', dni).get()
         
         if(forms.empty){
-            return Swal.fire({
+            const res = await Swal.fire({
                 title: 'Espera!', 
                 text: `${institutionData.institutionName} necesita que complete un formulario de membresia. ¿Desea completarlo?`,
                 icon: 'info',
@@ -330,7 +343,8 @@ export const checkForm = async (institution, dni) => {
                 confirmButtonText: 'Completar',
                 cancelButtonText: 'Más tarde',
                 reverseButtons: true
-            })          
+            })
+            return res.isConfirmed
         } else {
             await db.doc(`users/${dni}`).update({memberFormCompleted: true})
             await Swal.fire('', 'Alguien de tu familia ya completo el formulario de membresia', 'info')

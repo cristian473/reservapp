@@ -15,6 +15,8 @@ import ReservasInfo from './componets/InstitutionHome/reservasInfo'
 import { getUserByDNI } from './database'
 import { useSelector, useDispatch } from 'react-redux'
 import MemberForm from './componets/Home/memberForm.js';
+import { MemberFormPDF } from './componets/InstitutionHome/memberFormPDF';
+import MemberFormList from './componets/InstitutionHome/seeMemberForms';
 // import FaceRecognition from './componets/faceRecognition'
 
 function App() {
@@ -35,9 +37,11 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Switch>
+          <Route path='/pdf'component={MemberFormPDF}/>
+          <Route path='/form-list' component={MemberFormList}/>
           {!type &&
             <>
-              <Route path='/'>
+              <Route exact path='/'>
                 <Redirect to='/login' />
               </Route>
               <Route exact path={'/login'} component={Login} />

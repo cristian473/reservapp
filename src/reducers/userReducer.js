@@ -15,7 +15,6 @@ const initialState = {
 export function useReducer(state = initialState, { type, payload }) {
 
     switch (type) {
-
         case LOGGED:
             return {
                 ...state,
@@ -52,6 +51,7 @@ export function useReducer(state = initialState, { type, payload }) {
                 ...state,
                 memberFormData: payload
             }
+        default: 
+            return state        
     }
-    return state;
 }

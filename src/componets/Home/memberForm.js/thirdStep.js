@@ -123,7 +123,7 @@ const ThirdStep = () => {
                                 <div className="row">
                                     <div className="col">
                                         <small>Nombre: </small>
-                                        <span>{nombreCompleto.slice(0, 8) + '...'}</span>
+                                        <span>{nombreCompleto?.slice(0, 8) + '...'}</span>
                                     </div>
                                     <div className="col">
                                         <small>Parentesco: </small>

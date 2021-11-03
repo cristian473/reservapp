@@ -1,6 +1,5 @@
 import Screen from "../../GlobalComponents/screen"
 import { useEffect, useState } from "react"
-import textSignature from "text-signature"
 import { useDispatch, useSelector } from "react-redux"
 import Swal from "sweetalert2"
 import '../../../styles/memberFormStyles.scss'
@@ -34,7 +33,7 @@ const optionsParameter = {
 const FourthStep = () => {
     const {user, memberFormData} = useSelector((state) => state.user)
     const [formData, setFormData] = useState(formInitialState)
-    const [signature, setSignature] = useState({text: '', img: ''})
+    const [signature, setSignature] = useState({text: ''})
     const history = useHistory()
     const dispatch = useDispatch()
 
@@ -72,10 +71,7 @@ const FourthStep = () => {
     );
 
     const sing = (textString) => {
-        const textToSignature = new textSignature({...optionsParameter, textString})
-        textToSignature.generateImage({...optionsParameter, textString});
-        const base64Signature = textToSignature.getImageData()
-        setSignature({text: textString, img: base64Signature})
+        setSignature({text: textString})
     }
 
     const handleSign = () => {
@@ -96,7 +92,7 @@ const FourthStep = () => {
         setTimeout(() => {
             Swal.hideLoading()
             Swal.close()
-        }, 4000)
+        }, 1000)
     }
 
     const handleSumbit = (e) => {
@@ -152,17 +148,17 @@ const FourthStep = () => {
                         <input autoComplete='off' name='baptismMinister' value={capitalize(formData.baptismMinister)} onChange={handleInputChange}/>
                     </>    
                 )}
-                {signature.img && (
+                {signature.text && (
                     <div className="signatureContainer">
                         <p>Firma: </p>
-                        <div className="js-canvasTargetDom">
-                            <img src={signature.img} />
+                        <div className="signature">
+                            <p>{signature.text}</p>
                         </div>
                     </div>
                 )}
                 <div className="buttonsContainer">
                     <button type='button' onClick={handleSign} className='customButton'>{!signature.text ? 'Firmar' : 'Modificar firma'}</button>
-                    <button type='submit' className={`customButton ${!signature.img && 'disabled'}`}>Finalizar</button>                
+                    <button type='submit' className={`customButton ${!signature.text && 'disabled'}`}>Finalizar</button>                
                 </div>                
             </form>
         </Screen>

@@ -20,12 +20,12 @@ const Home = (props) => {
             .then(() => props.history.push('/settings'))
         }
         //checkea si no hizo el formulario
-        if(user.memberFormCompleted) return;
+        if(user.memberFormCompleted) return
 
         if(user.institution_subscribed.includes("comunidadcristianadontorcuato@gmail.com")){
             checkForm('comunidadcristianadontorcuato@gmail.com', user.dni)
-            .then((response) => {
-                if(response.isConfirmed) redirectTo(`/form?step=1`)            
+            .then((shouldCompleteForm) => {
+                if(shouldCompleteForm) redirectTo(`/form?step=1`)            
             })
         }
     }, [user])
@@ -54,32 +54,6 @@ const Home = (props) => {
                     <FontAwesomeIcon icon={faCog} />
                     <h5>Configuraciones</h5>
                 </div>
-
-                {/* {events.length === 0 && (
-                    <>
-                        <div className="myEvents">
-                            <FontAwesomeIcon icon={faCalendarDay} />
-                            <h5>Mis eventos</h5>
-                        </div>
-                        <div className="eventsContainer">
-                            <h5 className='noEvents'>
-                                No tienes eventos aún
-                            </h5>
-                        </div>
-                    </>
-                )}
-                {events.length > 0 && (
-                    <div className="option" onClick={() => redirectTo('/my_events')}>
-                        <FontAwesomeIcon icon={faBookmark} />
-                        <h5>Mis eventos</h5>
-                    </div>
-                )}
-                <div className="inputCode">
-                    <h5>Codigo de institución o evento:</h5>
-                    <input type="text" placeholder='Ingresar código' className='customInput' value={code} onChange={(e) => setcode(e.target.value)} />
-                    {code.length > 0 && <button onClick={subscribeEvent} className='customButton'>Confirmar</button>}
-                </div>
-                <button className='customButton' onClick={() => dispatch({ type: 'CLEAN_STATE' })} >Cerrar sesión</button> */}
             </div>
         </div >
     )
